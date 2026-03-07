@@ -5,6 +5,7 @@ from pathlib import Path
 import deepl
 from dotenv import load_dotenv
 import os
+from openai import OpenAI  # ← 추가: LM Studio OpenAI-compatible API용
 
 
 # ────────────────────────────────────────────────────────────────
@@ -25,10 +26,21 @@ if not DEEPL_API_KEY:
     print('DEEPL_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx:fx')
     sys.exit(1)
 
+# LM Studio OpenAI-compatible 클라이언트[](http://127.0.0.1:1234/v1)
+LOCAL_LLM_CLIENT = OpenAI(
+    base_url="http://127.0.0.1:1234/v1",
+    api_key="lm-studio"  # LM Studio는 더미 키 사용 (아무거나 상관없음)
+)
+
+# LM Studio에서 로드한 모델 이름
+#LOCAL_MODEL_NAME = "ja-ko-vn-7b-v1-Q4_K_M.gguf"
+#LOCAL_MODEL_NAME = "hell0ks/ja-ko-vn-7b-v1.gguf"
+LOCAL_MODEL_NAME = "ja-ko-vn-7b-v1"
+
 # DeepL 번역기 객체 생성
 try:
     # 기본은 유료 API (api.deepl.com)
-    translator = deepl.Translator(DEEPL_API_KEY)
+    #ranslator = deepl.Translator(DEEPL_API_KEY)
     
     # 무료 계정(api-free.deepl.com) 사용하는 경우 아래 주석 해제
     translator = deepl.Translator(DEEPL_API_KEY, server_url="https://api-free.deepl.com")
@@ -66,6 +78,7 @@ def translate_ja_to_ko(text: str) -> str:
         return text
 
     try:
+        #DeepL
         result = translator.translate_text(
             text,                        # 번역 대상 텍스트
             source_lang="JA",            # 원본 언어: 일본어 고정
@@ -73,19 +86,49 @@ def translate_ja_to_ko(text: str) -> str:
             formality="prefer_less",     # 반말·캐주얼 톤 강하게 유도 (default보다 덜 격식)
             model_type="quality_optimized",  # 최신 고품질 모델 강제 (응답은 느릴 수 있음)
             context=(
-                "일본 AV 자막 번역입니다. "
-                "기본적으로 캐주얼한 반말을 사용하지만, 존댓말을 사용할 때는 -요 체의 부드러운 존댓말을 자연스럽게 섞어주세요. "
+                "너는 일본어 AV 자막을 한국어로 번역하는 전문 번역가야. "
+                "기본적으로 구어체의 캐주얼한 반말을 사용하지만, 존댓말을 사용할 때는 -요 체의 부드러운 구어체의 존댓말을 자연스럽게 섞어주세요. "
                 "♡ 같은 이모티콘을 분위기에 맞춰 적절히 추가하여 분위기를 살려주세요."
             ),                           # 번역 품질 향상을 위한 맥락 지시 (청구 비용 없음)
             preserve_formatting=True,    # 숫자, 공백, 기호(!?…, ♡ 등) 형식 유지
             split_sentences="1",         # 구두점 + 줄바꿈 기준으로 문장 분할 (자막에 적합)
         )
+        print(f"DeepL 번역 실패 : 로컬 LLM(ja-ko-vn-7b-v1)으로 fallback")
+
         return result.text.strip()       # 앞뒤 공백 제거 후 반환
     except deepl.DeepLException as e:
-        # API 오류 발생 시 콘솔에 로그 남기고 원문에 실패 표시 붙여 반환
-        print(f"번역 오류 발생: {e}")
-        return f"[번역 실패] {text}"
+        #로컬 LLM fallback
+        try:
+            response = LOCAL_LLM_CLIENT.chat.completions.create(
+                model=LOCAL_MODEL_NAME,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "너는 일본어 AV 자막을 한국어로 번역하는 전문 번역가야.\n"
+                            "원문의 느낌을 최대한 살려서 자연스럽고 직설적인 한국어로 번역해.\n"
+                            "기본은 캐주얼 반말이지만, 부드러운 대화나 감정 표현 시 -요 체 존댓말을 자연스럽게 섞어.\n"
+                            "흥분되거나 애교스러운 부분은 ♡ 같은 이모티콘을 적절히 넣어.\n"
+                            "야한 표현은 한국어 사용자에게 자연스럽게 들리도록 해.\n"
+                            "번역만 출력하고 다른 설명은 넣지 마."
+                        )
+                    },
+                    {
+                        "role": "user",
+                        "content": f"다음 일본어 자막을 한국어로 번역해:\n\n{text}"
+                    }
+                ],
+                temperature=0.7,          # 약간 창의성 주기 (너무 딱딱하지 않게)
+                max_tokens=512,           # 자막 한 블록이니 충분
+                top_p=0.9,
+            )
 
+            translated = response.choices[0].message.content.strip()
+            return translated
+        
+        except Exception as local_e:
+            print(f"로컬 LLM 번역도 실패: {local_e}")
+            return f"[번역 실패 - DeepL & 로컬 모두 오류] {text}"
 
 # ────────────────────────────────────────────────────────────────
 # 3. SRT 파일 목록 가져오기
@@ -260,10 +303,10 @@ def process_srt_file(filepath: Path):
     # DeepL API 한도 확인
     usage = translator.get_usage()
 
-    if usage.any_limit_reached:
-        print("\n!!! DeepL API 한도 초과 !!!")
-        print("이번 달 번역 한도를 모두 사용했습니다.")
-        sys.exit(1)
+    #if usage.any_limit_reached:
+    #    print("\n!!! DeepL API 한도 초과 !!!")
+    #    print("이번 달 번역 한도를 모두 사용했습니다.")
+    #    sys.exit(1)
 
     # DeepL API 잔여량 확인
     if usage.character.valid:
