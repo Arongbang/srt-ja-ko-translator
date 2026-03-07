@@ -5,7 +5,7 @@ from pathlib import Path
 import deepl
 from dotenv import load_dotenv
 import os
-from openai import OpenAI  # ← 추가: LM Studio OpenAI-compatible API용
+from openai import OpenAI
 
 
 # ────────────────────────────────────────────────────────────────
@@ -13,7 +13,6 @@ from openai import OpenAI  # ← 추가: LM Studio OpenAI-compatible API용
 # ────────────────────────────────────────────────────────────────
 
 # .env 파일에서 환경변수 로드
-# 프로젝트 루트에 .env 파일이 있어야 함 (gitignore 필수!)
 load_dotenv()
 
 # DeepL API 키 가져오기
@@ -33,16 +32,11 @@ LOCAL_LLM_CLIENT = OpenAI(
 )
 
 # LM Studio에서 로드한 모델 이름
-#LOCAL_MODEL_NAME = "ja-ko-vn-7b-v1-Q4_K_M.gguf"
-#LOCAL_MODEL_NAME = "hell0ks/ja-ko-vn-7b-v1.gguf"
 LOCAL_MODEL_NAME = "ja-ko-vn-7b-v1"
 
 # DeepL 번역기 객체 생성
 try:
-    # 기본은 유료 API (api.deepl.com)
-    #ranslator = deepl.Translator(DEEPL_API_KEY)
-    
-    # 무료 계정(api-free.deepl.com) 사용하는 경우 아래 주석 해제
+    # 무료 계정(api-free.deepl.com)
     translator = deepl.Translator(DEEPL_API_KEY, server_url="https://api-free.deepl.com")
     
     print("DeepL 초기화 성공")
@@ -93,7 +87,6 @@ def translate_ja_to_ko(text: str) -> str:
             preserve_formatting=True,    # 숫자, 공백, 기호(!?…, ♡ 등) 형식 유지
             split_sentences="1",         # 구두점 + 줄바꿈 기준으로 문장 분할 (자막에 적합)
         )
-        print(f"DeepL 번역 실패 : 로컬 LLM(ja-ko-vn-7b-v1)으로 fallback")
 
         return result.text.strip()       # 앞뒤 공백 제거 후 반환
     except deepl.DeepLException as e:
