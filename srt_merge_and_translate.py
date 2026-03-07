@@ -52,7 +52,25 @@ limit = usage.character.limit
 remaining = limit - used
 
 # ────────────────────────────────────────────────────────────────
-# 2. 일본어 → 한국어 번역 함수 (AV 자막 특화)
+# 2. 환각 제거
+# ────────────────────────────────────────────────────────────────
+
+def clean_hallucination(text: str) -> str:
+    """
+    환각 제거
+    """
+    # 한글 + 영문 + 숫자 + 기본 구두점 + 공백 + ♡♥!?… 등 자주 쓰이는 기호만 허용
+    pattern_non_kor = r'[^\uAC00-\uD7A3a-zA-Z0-9\s~!@#$%^&*()_+\-=\[\]{}|\\;:\'",.<>/?`~♡♥!?…·\n]'
+    cleaned = re.sub(pattern_non_kor, '', text)
+    # '자막', '번역', '영상' 같은 환각 문자열 제거
+    pattern_subtitle = r'[^.!?…]*?(자막|번역|영상)[^.!?…]*[.!?…]?[\s\n]*'
+    cleaned = re.sub(pattern_subtitle, '', cleaned)
+    # 연속 공백/줄바꿈 정리
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+    return cleaned
+
+# ────────────────────────────────────────────────────────────────
+# 3. 일본어 → 한국어 번역 함수 (AV 자막 특화)
 # ────────────────────────────────────────────────────────────────
 
 def translate_ja_to_ko(text: str) -> str:
@@ -123,14 +141,15 @@ def translate_ja_to_ko(text: str) -> str:
             )
 
             translated = response.choices[0].message.content.strip()
-            return translated
+            cleaned = clean_hallucination(translated)
+            return cleaned
         
         except Exception as local_e:
             print(f"로컬 LLM 번역도 실패: {local_e}")
             return f"[번역 실패 - DeepL & 로컬 모두 오류] {text}"
 
 # ────────────────────────────────────────────────────────────────
-# 3. SRT 파일 목록 가져오기
+# 4. SRT 파일 목록 가져오기
 # ────────────────────────────────────────────────────────────────
 
 def get_srt_files(folder_path: Path) -> list[Path]:
@@ -148,7 +167,7 @@ def get_srt_files(folder_path: Path) -> list[Path]:
 
 
 # ────────────────────────────────────────────────────────────────
-# 4. 특정 일본어 휴식 표현 제거 (필요 시)
+# 5. 특정 일본어 휴식 표현 제거 (필요 시)
 # ────────────────────────────────────────────────────────────────
 
 def remove_little_rest_phrases(line: str) -> str:
@@ -164,7 +183,7 @@ def remove_little_rest_phrases(line: str) -> str:
 
 
 # ────────────────────────────────────────────────────────────────
-# 5. 1글자 자막 병합 핵심 함수
+# 6. 1글자 자막 병합 핵심 함수
 # ────────────────────────────────────────────────────────────────
 
 def merge_single_char_captions(srt_content: str) -> str:
@@ -274,7 +293,7 @@ def merge_single_char_captions(srt_content: str) -> str:
 
 
 # ────────────────────────────────────────────────────────────────
-# 6. 단일 SRT 파일 처리 (병합 → 번역 → .ko.srt 저장)
+# 7. 단일 SRT 파일 처리 (병합 → 번역 → .ko.srt 저장)
 # ────────────────────────────────────────────────────────────────
 
 def process_srt_file(filepath: Path):
@@ -393,7 +412,7 @@ def process_srt_file(filepath: Path):
 
 
 # ────────────────────────────────────────────────────────────────
-# 7. 프로그램 진입점
+# 8. 프로그램 진입점
 # ────────────────────────────────────────────────────────────────
 
 def main():
