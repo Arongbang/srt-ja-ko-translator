@@ -44,6 +44,12 @@ except Exception as e:
     print(f"DeepL 초기화 실패: {e}")
     sys.exit(1)
 
+# DeepL API 한도 확인
+usage = translator.get_usage()
+
+used = usage.character.count
+limit = usage.character.limit
+remaining = limit - used
 
 # ────────────────────────────────────────────────────────────────
 # 2. 일본어 → 한국어 번역 함수 (AV 자막 특화)
@@ -293,20 +299,10 @@ def process_srt_file(filepath: Path):
         print(f"  → 이미 {output_path.name} 파일이 존재합니다. 스킵.")
         return
     
-    # DeepL API 한도 확인
-    usage = translator.get_usage()
-
-    #if usage.any_limit_reached:
-    #    print("\n!!! DeepL API 한도 초과 !!!")
-    #    print("이번 달 번역 한도를 모두 사용했습니다.")
-    #    sys.exit(1)
+    
 
     # DeepL API 잔여량 확인
     if usage.character.valid:
-        used = usage.character.count
-        limit = usage.character.limit
-        remaining = limit - used
-
         print(f"  현재 사용: {used:,} / {limit:,} 자  (남음: {remaining:,} 자)")
     else:
         print("  경고: character 사용량 정보가 유효하지 않습니다.")
@@ -332,6 +328,9 @@ def process_srt_file(filepath: Path):
             print(f"  → 1글자 병합 변경 사항 없음")
 
         # 4. 번역 단계: 블록 단위로 처리 (번호/시간 유지, 텍스트만 번역)
+        if remaining == 0:
+            print(f"  → 로컬 모델 사용하여 번역 진행")
+
         lines = merged_content.splitlines()
         translated_lines = []
         in_text_block = False           # 현재 텍스트 블록 안에 있는지
