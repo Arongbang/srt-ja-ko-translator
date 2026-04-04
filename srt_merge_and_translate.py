@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 
+import config
 from srt_processor import get_srt_files, process_srt_file
 
 
@@ -10,6 +11,8 @@ def main():
         print("예시:")
         print('  python srt_merge_and_translate.py "C:/Subtitles"')
         sys.exit(1)
+
+    config.initialize()
 
     folder_path = Path(sys.argv[1]).resolve()
 

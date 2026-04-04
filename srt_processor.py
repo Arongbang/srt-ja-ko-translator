@@ -2,7 +2,7 @@ import re
 import shutil
 from pathlib import Path
 
-from config import usage, used, limit, remaining
+import config
 from translator import translate_ja_to_ko
 
 
@@ -64,11 +64,11 @@ def merge_single_char_captions(srt_content: str) -> str:
 
         num = block[0]
         time_line = block[1]
-        text_parts = block[2:]
 
         for j in range(2, len(block)):
             block[j] = remove_little_rest_phrases(block[j])
 
+        text_parts = block[2:]
         text = ' '.join(text_parts).strip()
         text_clean = re.sub(r'\s+', '', text)
 
@@ -165,13 +165,13 @@ def process_srt_file(filepath: Path) -> None:
         print(f"  → 이미 {output_path.name} 파일이 존재합니다. 스킵.")
         return
 
-    if usage.character.valid:
-        print(f"  현재 사용: {used:,} / {limit:,} 자  (남음: {remaining:,} 자)")
+    if config.usage.character.valid:
+        print(f"  현재 사용: {config.used:,} / {config.limit:,} 자  (남음: {config.remaining:,} 자)")
     else:
         print("  경고: character 사용량 정보가 유효하지 않습니다.")
         print("  → 무료 플랜이 아닌 경우일 수 있으니 한도 체크 없이 진행합니다.")
 
-    if remaining == 0:
+    if config.remaining == 0:
         print("  → 로컬 모델 사용하여 번역 진행")
 
     try:

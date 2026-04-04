@@ -53,7 +53,7 @@ def clean_hallucination(text: str) -> str:
         return ''
 
     # 한글 + 숫자 + 기본 구두점 + 자주 쓰이는 기호만 허용
-    pattern_non_kor = r'[^\uAC00-\uD7A3a-zA-Z0-9\s~!@#$%^&*()_+\-=\[\]{}|\\;:\'",.<>/?`~♡♥!?…·\n]'
+    pattern_non_kor = r'[^\uAC00-\uD7A30-9\s~!@#$%^&*()_+\-=\[\]{}|\\;:\'",.<>/?`~♡♥!?…·\n]'
     cleaned = re.sub(pattern_non_kor, '', text)
 
     # '자막', '번역', '영상' 포함 문장 제거

@@ -1,6 +1,6 @@
 import deepl
 
-from config import translator, LOCAL_LLM_CLIENT, LOCAL_MODEL_NAME
+import config
 from hallucination import clean_hallucination
 
 
@@ -19,7 +19,7 @@ def translate_ja_to_ko(text: str) -> str:
         return text
 
     try:
-        result = translator.translate_text(
+        result = config.deepl_translator.translate_text(
             text,
             source_lang="JA",
             target_lang="KO",
@@ -42,8 +42,8 @@ def translate_ja_to_ko(text: str) -> str:
 def _translate_with_local_llm(text: str) -> str:
     """로컬 LLM(LM Studio)으로 번역합니다. DeepL 폴백용."""
     try:
-        response = LOCAL_LLM_CLIENT.chat.completions.create(
-            model=LOCAL_MODEL_NAME,
+        response = config.LOCAL_LLM_CLIENT.chat.completions.create(
+            model=config.LOCAL_MODEL_NAME,
             messages=[
                 {
                     "role": "system",
