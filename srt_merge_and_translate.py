@@ -28,8 +28,8 @@ def main():
 
     print(f"발견된 .srt 파일 수: {len(srt_files)}\n")
 
-    for srt_file in srt_files:
-        process_srt_file(srt_file)
+    for i, srt_file in enumerate(srt_files, start=1):
+        process_srt_file(srt_file, index=i, total=len(srt_files))
         print()
 
     print("===== 모든 파일 처리 완료 =====")
