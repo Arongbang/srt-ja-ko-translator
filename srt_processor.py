@@ -3,7 +3,7 @@ import shutil
 from pathlib import Path
 
 import config
-from hallucination import remove_long_line, remove_english_line
+from hallucination import remove_repeated_patterns, remove_english_line
 from translator import translate_ja_to_ko
 
 
@@ -68,8 +68,6 @@ def merge_single_char_captions(srt_content: str) -> str:
 
         for j in range(2, len(block)):
             block[j] = remove_little_rest_phrases(block[j])
-            block[j] = remove_long_line(block[j])
-            block[j] = remove_english_line(block[j])
 
         text_parts = block[2:]
         text = ' '.join(text_parts).strip()
@@ -212,7 +210,7 @@ def _translate_srt_content(srt_content: str) -> str:
     return "\n".join(translated_lines).rstrip() + "\n"
 
 
-def process_srt_file(filepath: Path) -> None:
+def process_srt_file(filepath: Path, index: int = 1, total: int = 1) -> None:
     """
     하나의 .srt 파일을 처리합니다.
 
@@ -224,7 +222,7 @@ def process_srt_file(filepath: Path) -> None:
 
     이미 .ko.srt가 존재하면 스킵합니다.
     """
-    print(f"처리 중: {filepath}")
+    print(f"({index}/{total}) 처리 중: {filepath}")
 
     backup_path = filepath.with_suffix(filepath.suffix + '.bak')
     output_path = filepath.with_stem(filepath.stem + ".ko").with_suffix(".srt")
@@ -251,6 +249,26 @@ def process_srt_file(filepath: Path) -> None:
         original_content = filepath.read_text(encoding="utf-8-sig")
         merged_content = merge_single_char_captions(original_content)
         merged_content = merge_identical_captions(merged_content)
+
+        filtered_lines = []
+        in_text = False
+        for line in merged_content.splitlines():
+            stripped = line.strip()
+            if not stripped:
+                in_text = False
+                filtered_lines.append(line)
+            elif re.match(r'^\d+$', stripped):
+                in_text = False
+                filtered_lines.append(line)
+            elif '-->' in stripped:
+                in_text = True
+                filtered_lines.append(line)
+            elif in_text:
+                line = remove_repeated_patterns(remove_english_line(line))
+                filtered_lines.append(line)
+            else:
+                filtered_lines.append(line)
+        merged_content = '\n'.join(filtered_lines) + '\n'
 
         if merged_content.strip() != original_content.strip():
             filepath.write_text(merged_content, encoding="utf-8-sig")

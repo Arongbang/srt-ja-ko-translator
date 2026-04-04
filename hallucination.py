@@ -1,7 +1,7 @@
 import re
 
 
-def _remove_repeated_patterns(text: str) -> str:
+def remove_repeated_patterns(text: str) -> str:
     """
     반복 패턴 환각 제거 (번역 전·후 모두 적용 가능)
 
@@ -36,11 +36,6 @@ def _remove_repeated_patterns(text: str) -> str:
     return ''.join(tokens).strip()
 
 
-def remove_long_line(line: str) -> str:
-    """120글자 이상인 줄을 제거합니다."""
-    return '' if len(line) >= 120 else line
-
-
 def remove_english_line(line: str) -> str:
     """영문자가 포함된 줄을 제거합니다."""
     return '' if re.search(r'[a-zA-Z]', line) else line
@@ -58,7 +53,7 @@ def clean_hallucination(text: str) -> str:
     5. 영문자 포함 줄 제거
     6. 연속 공백·줄바꿈 정리
     """
-    text = _remove_repeated_patterns(text)
+    text = remove_repeated_patterns(text)
     if not text:
         return ''
 
