@@ -3,6 +3,7 @@ import shutil
 from pathlib import Path
 
 import config
+from hallucination import remove_long_line, remove_english_line
 from translator import translate_ja_to_ko
 
 
@@ -67,6 +68,8 @@ def merge_single_char_captions(srt_content: str) -> str:
 
         for j in range(2, len(block)):
             block[j] = remove_little_rest_phrases(block[j])
+            block[j] = remove_long_line(block[j])
+            block[j] = remove_english_line(block[j])
 
         text_parts = block[2:]
         text = ' '.join(text_parts).strip()

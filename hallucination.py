@@ -36,6 +36,16 @@ def _remove_repeated_patterns(text: str) -> str:
     return ''.join(tokens).strip()
 
 
+def remove_long_line(line: str) -> str:
+    """120글자 이상인 줄을 제거합니다."""
+    return '' if len(line) >= 120 else line
+
+
+def remove_english_line(line: str) -> str:
+    """영문자가 포함된 줄을 제거합니다."""
+    return '' if re.search(r'[a-zA-Z]', line) else line
+
+
 def clean_hallucination(text: str) -> str:
     """
     번역 결과에서 환각 텍스트를 제거합니다.
@@ -59,15 +69,6 @@ def clean_hallucination(text: str) -> str:
     # '자막', '번역', '영상' 포함 문장 제거
     pattern_subtitle = r'[^.!?…]*?(자막|번역|영상)[^.!?…]*[.!?…]?[\s\n]*'
     cleaned = re.sub(pattern_subtitle, '', cleaned)
-
-    # 120글자 이상인 줄 제거
-    lines = cleaned.splitlines()
-    lines = [l for l in lines if len(l) < 120]
-
-    # 영문자가 포함된 줄 제거
-    lines = [l for l in lines if not re.search(r'[a-zA-Z]', l)]
-
-    cleaned = '\n'.join(lines)
 
     # 연속 공백·줄바꿈 정리
     cleaned = re.sub(r'\s+', ' ', cleaned).strip()
