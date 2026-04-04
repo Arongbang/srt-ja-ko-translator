@@ -42,3 +42,11 @@ def initialize() -> None:
         base_url="http://127.0.0.1:1234/v1",
         api_key="lm-studio",
     )
+
+
+def refresh_usage() -> None:
+    global usage, used, limit, remaining
+    usage = deepl_translator.get_usage()
+    used = usage.character.count
+    limit = usage.character.limit
+    remaining = limit - used

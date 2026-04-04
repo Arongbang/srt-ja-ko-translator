@@ -233,6 +233,8 @@ def process_srt_file(filepath: Path) -> None:
         print(f"  → 이미 {output_path.name} 파일이 존재합니다. 스킵.")
         return
 
+    config.refresh_usage()
+
     if config.usage.character.valid:
         print(f"  현재 사용: {config.used:,} / {config.limit:,} 자  (남음: {config.remaining:,} 자)")
     else:
