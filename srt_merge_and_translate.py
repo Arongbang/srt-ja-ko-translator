@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 
 import config
+from apply_replacements import load_replace_rules
 from srt_processor import get_srt_files, process_srt_file
 
 
@@ -13,6 +14,13 @@ def main():
         sys.exit(1)
 
     config.initialize()
+
+    template_path = Path(__file__).parent / "multiple_replace_groups.template"
+    replace_rules = load_replace_rules(template_path) if template_path.exists() else []
+    if replace_rules:
+        print(f"치환 규칙 로드 완료: {len(replace_rules)}개")
+    else:
+        print("치환 규칙 없음 (multiple_replace_groups.template 미존재 또는 규칙 없음)")
 
     folder_path = Path(sys.argv[1]).resolve()
 
@@ -29,7 +37,7 @@ def main():
     print(f"발견된 .srt 파일 수: {len(srt_files)}\n")
 
     for i, srt_file in enumerate(srt_files, start=1):
-        process_srt_file(srt_file, index=i, total=len(srt_files))
+        process_srt_file(srt_file, index=i, total=len(srt_files), replace_rules=replace_rules)
         print()
 
     print("===== 모든 파일 처리 완료 =====")
