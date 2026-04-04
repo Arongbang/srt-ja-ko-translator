@@ -105,6 +105,71 @@ def merge_single_char_captions(srt_content: str) -> str:
     return "\n".join(result_lines).rstrip() + "\n"
 
 
+def merge_identical_captions(srt_content: str) -> str:
+    """
+    연속된 동일 텍스트 자막 블록을 하나로 병합합니다.
+
+    처리 흐름:
+    1. SRT를 블록 단위로 분리
+    2. 현재 블록과 다음 블록의 텍스트가 동일하면 계속 확장
+    3. 시작 시간은 첫 번째 블록, 종료 시간은 마지막 블록 기준
+    4. 최종적으로 번호를 1부터 다시 매김
+    """
+    lines = srt_content.strip().splitlines()
+    blocks: list[list[str]] = []
+    current_block: list[str] = []
+
+    for line in lines:
+        if not line.strip():
+            if current_block:
+                blocks.append(current_block)
+                current_block = []
+            continue
+        current_block.append(line)
+
+    if current_block:
+        blocks.append(current_block)
+
+    merged: list[list[str]] = []
+    i = 0
+
+    while i < len(blocks):
+        block = blocks[i]
+
+        if len(block) < 3:
+            merged.append(block)
+            i += 1
+            continue
+
+        text = ' '.join(block[2:]).strip()
+        start_str = block[1].split('-->')[0].strip()
+        end_str = block[1].split('-->')[1].strip()
+
+        j = i + 1
+        while j < len(blocks):
+            next_block = blocks[j]
+            if len(next_block) < 3:
+                break
+            next_text = ' '.join(next_block[2:]).strip()
+            if next_text != text:
+                break
+            end_str = next_block[1].split('-->')[1].strip()
+            j += 1
+
+        merged.append([block[0], f"{start_str} --> {end_str}"] + block[2:])
+        i = j
+
+    result_lines: list[str] = []
+    for new_index, block in enumerate(merged, start=1):
+        if len(block) < 3:
+            continue
+        result_lines.append(str(new_index))
+        result_lines.extend(block[1:])
+        result_lines.append("")
+
+    return "\n".join(result_lines).rstrip() + "\n"
+
+
 def _translate_srt_content(srt_content: str) -> str:
     """SRT 문자열의 텍스트 블록만 번역하여 반환합니다."""
     lines = srt_content.splitlines()
@@ -183,12 +248,13 @@ def process_srt_file(filepath: Path) -> None:
 
         original_content = filepath.read_text(encoding="utf-8-sig")
         merged_content = merge_single_char_captions(original_content)
+        merged_content = merge_identical_captions(merged_content)
 
         if merged_content.strip() != original_content.strip():
             filepath.write_text(merged_content, encoding="utf-8-sig")
-            print("  → 1글자 병합 수정 완료 (원본 덮어쓰기)")
+            print("  → 1글자 병합 & 중복 자막 병합 수정 완료 (원본 덮어쓰기)")
         else:
-            print("  → 1글자 병합 변경 사항 없음")
+            print("  → 1글자 병합 & 중복 자막 병합 변경 사항 없음")
 
         translated_content = _translate_srt_content(merged_content)
         output_path.write_text(translated_content, encoding="utf-8-sig")
