@@ -249,9 +249,18 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
             print("  → 1글자 병합 & 중복 자막 병합 변경 사항 없음")
 
         translated_content = _translate_srt_content(merged_content)
-        #if replace_rules:
-        #    translated_content = apply_rules(translated_content, replace_rules)
-        output_path.write_text(translated_content, encoding="utf-8-sig")
+        if replace_rules:
+            replaced_content = apply_rules(translated_content, replace_rules)
+            if replaced_content != translated_content:
+                output_path.write_text(translated_content, encoding="utf-8-sig")
+                shutil.copy2(output_path, output_path.with_suffix(output_path.suffix + '.bak'))
+                output_path.write_text(replaced_content, encoding="utf-8-sig")
+                translated_content = replaced_content
+                print(f"  → 치환 규칙 적용 완료 (백업: {output_path.name}.bak)")
+            else:
+                output_path.write_text(translated_content, encoding="utf-8-sig")
+        else:
+            output_path.write_text(translated_content, encoding="utf-8-sig")
         print(f"  → 한국어 자막 저장 완료: {output_path.name}")
 
     except Exception as e:
