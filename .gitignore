@@ -1,1 +1,11 @@
 .env
+
+# Python
+__pycache__/
+*.pyc
+
+# Claude Code
+.claude/
+
+# 로그
+*.log
