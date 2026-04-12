@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 import config
-from apply_replacements import apply_rules
+from colloquial import make_colloquial
 from hallucination import remove_repeated_patterns, remove_english_line
 from translator import translate_ja_to_ko, reset_stats, get_stats
 
@@ -184,6 +184,48 @@ def _translate_srt_content(srt_content: str) -> str:
     return "\n".join(translated_lines).rstrip() + "\n"
 
 
+def _apply_colloquial_to_srt(srt_content: str) -> str:
+    """번역된 SRT의 텍스트 블록에만 구어체 변환을 적용합니다."""
+    lines = srt_content.splitlines()
+    result_lines: list[str] = []
+    in_text_block = False
+    current_text: list[str] = []
+
+    def flush_colloquial():
+        if current_text:
+            colloquial = make_colloquial("\n".join(current_text))
+            result_lines.extend(colloquial.splitlines())
+            current_text.clear()
+
+    for line in lines:
+        stripped = line.strip()
+
+        if not stripped:
+            flush_colloquial()
+            result_lines.append("")
+            in_text_block = False
+            continue
+
+        if re.match(r'^\d+$', stripped):
+            flush_colloquial()
+            result_lines.append(line)
+            in_text_block = False
+            continue
+
+        if "-->" in stripped:
+            result_lines.append(line)
+            in_text_block = True
+            continue
+
+        if in_text_block:
+            current_text.append(line)
+        else:
+            result_lines.append(line)
+
+    flush_colloquial()
+    return "\n".join(result_lines).rstrip() + "\n"
+
+
 def _count_blocks(srt_content: str) -> int:
     """SRT 문자열에서 자막 블록 수를 셉니다."""
     return len(_parse_srt_blocks(srt_content))
@@ -194,7 +236,7 @@ def _log(msg: str) -> None:
     print(f"  [{ts}] {msg}")
 
 
-def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rules: list | None = None) -> None:
+def process_srt_file(filepath: Path, index: int = 1, total: int = 1) -> None:
     """
     하나의 .srt 파일을 처리합니다.
 
@@ -304,20 +346,16 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
                 print("    " + " | ".join(b))
             return
 
-        # ── Step 7: .ko.srt 저장 & 백업 ─────────────────────────────
+        # ── Step 7: 원문 번역본 백업 & 구어체 변환 후 .ko.srt 저장 ──
+        bak_path = output_path.with_suffix(output_path.suffix + '.bak')
         output_path.write_text(translated_content, encoding="utf-8-sig")
-        shutil.copy2(output_path, output_path.with_suffix(output_path.suffix + '.bak'))
-        _log(f"저장 완료: {output_path.name}  (백업: {output_path.name}.bak)")
+        shutil.copy2(output_path, bak_path)
+        _log(f"번역 백업 저장: {bak_path.name}")
 
-        # ── Step 8: 치환 규칙 적용 ───────────────────────────────────
-        if replace_rules:
-            t0 = time.time()
-            replaced_content = apply_rules(translated_content, replace_rules)
-            if replaced_content != translated_content:
-                output_path.write_text(replaced_content, encoding="utf-8-sig")
-                _log(f"치환 규칙 적용 완료 ({time.time() - t0:.1f}s)")
-            else:
-                _log(f"치환 규칙: 변경 사항 없음 ({time.time() - t0:.1f}s)")
+        t0 = time.time()
+        colloquial_content = _apply_colloquial_to_srt(translated_content)
+        output_path.write_text(colloquial_content, encoding="utf-8-sig")
+        _log(f"구어체 변환 완료 ({time.time() - t0:.1f}s) → {output_path.name}")
 
         elapsed_total = time.time() - ts_start
         _log(f"완료 ✓  총 소요: {elapsed_total:.1f}s")

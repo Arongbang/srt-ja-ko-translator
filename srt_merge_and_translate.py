@@ -2,8 +2,11 @@ import argparse
 import sys
 from pathlib import Path
 
+# Windows 터미널 cp949 환경에서 유니코드 출력 보장
+if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 import config
-from apply_replacements import load_replace_rules
 from srt_processor import get_srt_files, process_srt_file
 from transcriber import transcribe_folder
 
@@ -77,15 +80,8 @@ def main():
         print("===== --only-transcribe: 자막 추출 완료, 번역 단계 건너뜀 =====")
         return
 
-    # ── 번역 단계: DeepL 초기화 및 치환 규칙 로드 ────────────────────────────
+    # ── 번역 단계: DeepL 초기화 ──────────────────────────────────────────────
     config.initialize()
-
-    template_path = Path(__file__).parent / "multiple_replace_groups.template"
-    replace_rules = load_replace_rules(template_path) if template_path.exists() else []
-    if replace_rules:
-        print(f"치환 규칙 로드 완료: {len(replace_rules)}개")
-    else:
-        print("치환 규칙 없음 (multiple_replace_groups.template 미존재 또는 규칙 없음)")
 
     srt_files = get_srt_files(folder_path)
 
@@ -98,7 +94,7 @@ def main():
     print(f"발견된 .srt 파일 수: {len(srt_files)}\n")
 
     for i, srt_file in enumerate(srt_files, start=1):
-        process_srt_file(srt_file, index=i, total=len(srt_files), replace_rules=replace_rules)
+        process_srt_file(srt_file, index=i, total=len(srt_files))
         print()
 
     print("===== 모든 파일 처리 완료 =====")
