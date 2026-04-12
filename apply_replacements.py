@@ -7,8 +7,12 @@ from pathlib import Path
 
 
 def _convert_backrefs(replace: str) -> str:
-    """SubtitleEdit 방식의 역참조 (\\$1, \\$2) 를 Python 방식 (\\1, \\2) 으로 변환합니다."""
-    return re.sub(r'\\\$(\d+)', lambda m: '\\' + m.group(1), replace)
+    """SubtitleEdit 방식의 역참조 ($1, \\$1) 를 Python 방식 (\\1) 으로 변환합니다."""
+    # 1단계: \\$1 형식 (이미 이스케이프된 경우) 먼저 처리 — 순서 중요
+    result = re.sub(r'\\\$(\d+)', lambda m: '\\' + m.group(1), replace)
+    # 2단계: $1 형식 (SubtitleEdit XML 기본 저장 형식) 처리
+    result = re.sub(r'\$(\d+)', lambda m: '\\' + m.group(1), result)
+    return result
 
 
 def load_replace_rules(template_path: Path) -> list[tuple[str, str, bool]]:
