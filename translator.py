@@ -3,6 +3,20 @@ import deepl
 import config
 from hallucination import clean_hallucination
 
+# 파일당 번역 소스 통계 (srt_processor.py에서 reset_stats()/get_stats() 사용)
+_stats: dict[str, int] = {"deepl": 0, "llm": 0, "failed": 0}
+
+
+def reset_stats() -> None:
+    """파일 처리 시작 전 통계를 초기화합니다."""
+    global _stats
+    _stats = {"deepl": 0, "llm": 0, "failed": 0}
+
+
+def get_stats() -> dict[str, int]:
+    """현재 번역 소스별 통계를 반환합니다."""
+    return dict(_stats)
+
 
 def translate_ja_to_ko(text: str) -> str:
     """
@@ -17,6 +31,9 @@ def translate_ja_to_ko(text: str) -> str:
     """
     if not text.strip():
         return text
+
+    if config.debug:
+        print(f"    [번역 입력] {text!r}")
 
     try:
         result = config.deepl_translator.translate_text(
@@ -33,7 +50,11 @@ def translate_ja_to_ko(text: str) -> str:
             preserve_formatting=True,
             split_sentences="1",
         )
-        return result.text.strip()
+        _stats["deepl"] += 1
+        translated = result.text.strip()
+        if config.debug:
+            print(f"    [DeepL 출력] {translated!r}")
+        return translated
 
     except deepl.DeepLException:
         return _translate_with_local_llm(text)
@@ -74,8 +95,13 @@ def _translate_with_local_llm(text: str) -> str:
             repetition_penalty=1.1,   # 반복이나 설명문 붙는 거 줄임
         )
         translated = response.choices[0].message.content.strip()
-        return clean_hallucination(translated)
+        result = clean_hallucination(translated)
+        _stats["llm"] += 1
+        if config.debug:
+            print(f"    [LLM 출력] {result!r}")
+        return result
 
     except Exception as e:
         print(f"로컬 LLM 번역도 실패: {e}")
+        _stats["failed"] += 1
         return f"[번역 실패 - DeepL & 로컬 모두 오류] {text}"

@@ -1,11 +1,13 @@
 import re
 import shutil
+import time
+from datetime import datetime
 from pathlib import Path
 
 import config
 from apply_replacements import apply_rules
 from hallucination import remove_repeated_patterns, remove_english_line
-from translator import translate_ja_to_ko
+from translator import translate_ja_to_ko, reset_stats, get_stats
 
 
 def get_srt_files(folder_path: Path) -> list[Path]:
@@ -182,6 +184,16 @@ def _translate_srt_content(srt_content: str) -> str:
     return "\n".join(translated_lines).rstrip() + "\n"
 
 
+def _count_blocks(srt_content: str) -> int:
+    """SRT 문자열에서 자막 블록 수를 셉니다."""
+    return len(_parse_srt_blocks(srt_content))
+
+
+def _log(msg: str) -> None:
+    ts = datetime.now().strftime("%H:%M:%S")
+    print(f"  [{ts}] {msg}")
+
+
 def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rules: list | None = None) -> None:
     """
     하나의 .srt 파일을 처리합니다.
@@ -193,37 +205,56 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
     4. 번역 결과 → .ko.srt 파일로 저장
 
     이미 .ko.srt가 존재하면 스킵합니다.
+    dry_run=True 이면 파일을 실제로 쓰지 않고 콘솔에만 출력합니다.
     """
-    print(f"({index}/{total}) 처리 중: {filepath}")
+    ts_start = time.time()
+    ts_label = datetime.now().strftime("%H:%M:%S")
+    print(f"\n[{ts_label}] ({index}/{total}) 처리 중: {filepath.name}")
 
     backup_path = filepath.with_suffix(filepath.suffix + '.bak')
     output_path = filepath.with_stem(filepath.stem + ".ko").with_suffix(".srt")
 
-    if output_path.exists():
-        print(f"  → 이미 {output_path.name} 파일이 존재합니다. 스킵.")
+    if output_path.exists() and not config.dry_run:
+        _log(f"이미 {output_path.name} 파일이 존재합니다. 스킵.")
         return
 
     config.refresh_usage()
 
     if config.usage.character.valid:
-        print(f"  현재 사용: {config.used:,} / {config.limit:,} 자  (남음: {config.remaining:,} 자)")
+        _log(f"DeepL 잔여: {config.remaining:,} / {config.limit:,} 자")
     else:
-        print("  경고: character 사용량 정보가 유효하지 않습니다.")
-        print("  → 무료 플랜이 아닌 경우일 수 있으니 한도 체크 없이 진행합니다.")
+        _log("경고: character 사용량 정보가 유효하지 않습니다. (무료 플랜 외일 수 있음)")
 
     if config.remaining == 0:
-        print("  → 로컬 모델 사용하여 번역 진행")
+        _log("→ 로컬 모델 사용하여 번역 진행")
 
     try:
-        shutil.copy2(filepath, backup_path)
-        print(f"  → 백업 생성: {backup_path.name}")
+        # ── Step 1: 백업 ─────────────────────────────────────────────
+        if not config.dry_run:
+            shutil.copy2(filepath, backup_path)
+        _log(f"{'[dry-run] ' if config.dry_run else ''}백업 생성: {backup_path.name}")
 
         original_content = filepath.read_text(encoding="utf-8-sig")
-        merged_content = merge_single_char_captions(original_content)
-        merged_content = merge_identical_captions(merged_content)
+        orig_blocks = _count_blocks(original_content)
 
+        # ── Step 2: 1글자 병합 ───────────────────────────────────────
+        t0 = time.time()
+        merged_content = merge_single_char_captions(original_content)
+        after_single = _count_blocks(merged_content)
+
+        # ── Step 3: 중복 자막 병합 ───────────────────────────────────
+        merged_content = merge_identical_captions(merged_content)
+        after_dup = _count_blocks(merged_content)
+        _log(
+            f"병합: {orig_blocks}블록 → 1글자병합 {after_single}블록 → 중복제거 {after_dup}블록 "
+            f"({time.time() - t0:.1f}s)"
+        )
+
+        # ── Step 4: 반복 패턴 & 영문자 필터 ─────────────────────────
+        t0 = time.time()
         filtered_lines = []
         in_text = False
+        removed_lines = 0
         for line in merged_content.splitlines():
             stripped = line.strip()
             if not stripped:
@@ -236,31 +267,63 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
                 in_text = True
                 filtered_lines.append(line)
             elif in_text:
-                line = remove_repeated_patterns(remove_english_line(line))
-                filtered_lines.append(line)
+                cleaned = remove_repeated_patterns(remove_english_line(line))
+                if cleaned != line:
+                    removed_lines += 1
+                filtered_lines.append(cleaned)
             else:
                 filtered_lines.append(line)
         merged_content = '\n'.join(filtered_lines) + '\n'
+        _log(f"전처리 필터: {removed_lines}줄 정제됨 ({time.time() - t0:.1f}s)")
 
+        # ── Step 5: 원본 덮어쓰기 (변경 시에만) ──────────────────────
         if merged_content.strip() != original_content.strip():
-            filepath.write_text(merged_content, encoding="utf-8-sig")
-            print("  → 1글자 병합 & 중복 자막 병합 수정 완료 (원본 덮어쓰기)")
+            if not config.dry_run:
+                filepath.write_text(merged_content, encoding="utf-8-sig")
+            _log(f"{'[dry-run] ' if config.dry_run else ''}원본 SRT 업데이트 완료")
         else:
-            print("  → 1글자 병합 & 중복 자막 병합 변경 사항 없음")
+            _log("원본 변경 사항 없음")
 
+        # ── Step 6: 번역 ─────────────────────────────────────────────
+        _log(f"번역 시작 ({after_dup}블록)...")
+        reset_stats()
+        t0 = time.time()
         translated_content = _translate_srt_content(merged_content)
+        stats = get_stats()
+        total_translated = stats["deepl"] + stats["llm"] + stats["failed"]
+        elapsed = time.time() - t0
+        _log(
+            f"번역 완료: DeepL={stats['deepl']} / LLM폴백={stats['llm']} / 실패={stats['failed']} "
+            f"(총 {total_translated}블록, {elapsed:.1f}s)"
+        )
+
+        if config.dry_run:
+            _log("[dry-run] 번역 결과 미저장 — 처음 3블록 미리보기:")
+            preview_blocks = _parse_srt_blocks(translated_content)[:3]
+            for b in preview_blocks:
+                print("    " + " | ".join(b))
+            return
+
+        # ── Step 7: .ko.srt 저장 & 백업 ─────────────────────────────
         output_path.write_text(translated_content, encoding="utf-8-sig")
         shutil.copy2(output_path, output_path.with_suffix(output_path.suffix + '.bak'))
-        print(f"  → 번역 완료, 백업 생성: {output_path.name}.bak")
+        _log(f"저장 완료: {output_path.name}  (백업: {output_path.name}.bak)")
 
+        # ── Step 8: 치환 규칙 적용 ───────────────────────────────────
         if replace_rules:
+            t0 = time.time()
             replaced_content = apply_rules(translated_content, replace_rules)
             if replaced_content != translated_content:
                 output_path.write_text(replaced_content, encoding="utf-8-sig")
-                print(f"  → 치환 규칙 적용 완료")
-        print(f"  → 한국어 자막 저장 완료: {output_path.name}")
+                _log(f"치환 규칙 적용 완료 ({time.time() - t0:.1f}s)")
+            else:
+                _log(f"치환 규칙: 변경 사항 없음 ({time.time() - t0:.1f}s)")
+
+        elapsed_total = time.time() - ts_start
+        _log(f"완료 ✓  총 소요: {elapsed_total:.1f}s")
 
     except Exception as e:
-        print(f"  !!! 오류 발생: {e}")
+        _log(f"!!! 오류 발생: {e}")
         if backup_path.exists():
-            print(f"  (참고: 백업 파일은 생성되었습니다 - {backup_path.name})")
+            _log(f"(참고: 백업 파일은 생성되었습니다 — {backup_path.name})")
+        raise

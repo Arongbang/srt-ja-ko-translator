@@ -6,7 +6,7 @@ from openai import OpenAI
 
 load_dotenv()
 
-LOCAL_MODEL_NAME = "ja-ko-vn-7b-v1"
+LOCAL_MODEL_NAME = "ja-ko-vn-12b-v2"
 
 deepl_translator: deepl.Translator | None = None
 LOCAL_LLM_CLIENT: OpenAI | None = None
@@ -14,6 +14,11 @@ usage = None
 used = 0
 limit = 0
 remaining = 0
+
+# 디버깅 / 실행 모드 플래그 (srt_merge_and_translate.py 에서 설정)
+debug: bool = False
+dry_run: bool = False
+skip_hallucination: bool = False
 
 
 def initialize() -> None:
