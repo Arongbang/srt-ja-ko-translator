@@ -52,9 +52,14 @@ def translate_ja_to_ko(text: str) -> str:
         )
         _stats["deepl"] += 1
         translated = result.text.strip()
+        # DeepL 결과도 환각 제거 적용 (일본어 잔류 문자, 반복 패턴 등)
+        cleaned = clean_hallucination(translated)
+        if not cleaned:
+            # 환각 제거 후 빈 결과면 LLM으로 폴백
+            return _translate_with_local_llm(text)
         if config.debug:
-            print(f"    [DeepL 출력] {translated!r}")
-        return translated
+            print(f"    [DeepL 출력] {cleaned!r}")
+        return cleaned
 
     except deepl.DeepLException:
         return _translate_with_local_llm(text)

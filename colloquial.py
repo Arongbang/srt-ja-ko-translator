@@ -1,6 +1,7 @@
 """구어체 변환 모듈 - 번역된 한국어를 자연스러운 구어체 자막으로 변환"""
 import re
 import config
+from hallucination import clean_hallucination
 
 # "너는 X야" 패턴 제거 → 직접 지시형으로 변경해 프롬프트 누출 위험 감소
 SYSTEM_PROMPT = """한국어 자막 구어체 변환기.
@@ -58,10 +59,13 @@ def make_colloquial(text: str) -> str:
             temperature=0.3,
             max_tokens=256,
             top_p=0.92,
+            repetition_penalty=1.15,  # 반복 환각(자〜〜〜 등) 억제
         )
         result = response.choices[0].message.content.strip()
         if not result or _is_prompt_leak(result):
             return text  # 누출 감지 시 원본 반환
-        return result
+        # 구어체 변환 결과의 환각(반복 문자, 비한글 잔류 등) 제거
+        cleaned = clean_hallucination(result)
+        return cleaned if cleaned else text  # 환각 제거 후 빈 결과면 원본 반환
     except Exception:
         return text  # 오류 시 원본 반환 (silent fallback)
