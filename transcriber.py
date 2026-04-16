@@ -1,12 +1,12 @@
 """
 transcriber.py — faster-whisper 기반 영상 → SRT 자막 추출 모듈
 
-일본어 성인 영상 특화 파라미터로 환각을 최소화한다.
+일본어 성인 영상 특화 파라미터로 환각을 최소화하면서 조용한 대화도 감지한다.
 핵심 설정:
   - condition_on_previous_text=False : 이전 구간 환각이 다음 구간으로 전파되는 것 차단
   - vad_filter=True                  : 배경음악·신음 등 비대화 구간 자동 제거
-  - no_speech_threshold=0.7          : 기본(0.6)보다 엄격하게 무음 구간 필터링
-  - log_prob_threshold=-0.6          : 저신뢰도 세그먼트 제거 (기본 -1.0)
+  - no_speech_threshold=0.5          : 기본(0.6)보다 낮게 — 조용한 대화도 음성으로 처리
+  - initial_prompt                   : 일본어 대화 힌트로 비언어 소리 오역 억제
 """
 from __future__ import annotations
 
@@ -26,14 +26,20 @@ MODEL_ID = "large-v3-turbo"
 
 VIDEO_EXTENSIONS = {".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".ts", ".m2ts"}
 
-# VAD 파라미터: 성인 영상의 배경음악·신음 환경에 맞춰 보수적으로 설정
-# threshold를 낮춰(0.3) 음성 감지 감도를 높인다 — 너무 높으면 유효 대사까지 제거됨
+# VAD 파라미터: 조용한 환경 대화 감지와 신음 필터링의 균형
+# threshold 0.25 — 기본(0.5)보다 낮아 소리 작은 대화도 통과, 0.2 이하는 신음 오인 위험
+# min_silence_duration_ms 600 — 0.6초 침묵이면 자막 블록 분리 (기존 2초는 뭉침 원인)
 VAD_PARAMETERS = {
-    "threshold": 0.3,                # 음성 감지 임계값 (기본 0.5, 낮을수록 더 많이 감지)
-    "min_speech_duration_ms": 200,   # 200ms 미만 음성 무시
-    "min_silence_duration_ms": 2000, # 2초 이상 침묵만 구간 구분자로 인정 (기본값)
-    "speech_pad_ms": 400,            # 음성 앞뒤 여백 (기본값)
+    "threshold": 0.25,               # 음성 감지 임계값 (기본 0.5, 0.25는 조용한 대화 감지)
+    "min_speech_duration_ms": 150,   # 150ms 미만 음성 무시 (기존 200ms→짧은 발화 감지 개선)
+    "min_silence_duration_ms": 600,  # 600ms 침묵이면 구간 분리 (기존 2000ms→뭉침 해소)
+    "max_speech_duration_s": 8.0,    # 한 VAD 청크 최대 8초 강제 상한 (10~20초 뭉침 방지)
+    "speech_pad_ms": 400,            # 음성 앞뒤 여백 400ms — 인접 청크 오디오 중복 방지
 }
+
+# Whisper initial_prompt: 일본어 대화 컨텍스트 힌트
+# 비언어 소리(신음)를 일본어 글자로 오역하는 것을 억제하는 효과
+INITIAL_PROMPT = "日本語の会話。"  # "일본어 회화."
 
 
 # ── 내부 헬퍼 ─────────────────────────────────────────────────────────────────
@@ -110,9 +116,11 @@ def transcribe_video(video_path: Path, model: "WhisperModel") -> Optional[Path]:
 
             # ── 환각 억제 핵심 파라미터 ──────────────────────────────────
             condition_on_previous_text=False,  # 이전 구간 환각 전파 차단
-            # no_speech_threshold: 기본값(0.6) 유지 — 더 엄격하게 하면 유효 대사도 제거됨
-            # log_prob_threshold: 기본값(-1.0) 유지 — -0.6은 배경음악 환경에서 과도하게 엄격
+            no_speech_threshold=0.5,           # 기본(0.6)보다 낮게 — 조용한 대화도 음성 처리
             compression_ratio_threshold=2.4,   # 반복 압축비 높으면 환각 의심
+
+            # ── 일본어 대화 컨텍스트 힌트 ────────────────────────────────
+            initial_prompt=INITIAL_PROMPT,     # 비언어 소리 오역 억제 + 대화체 인식 향상
 
             # ── VAD (배경음악·신음 구간 자동 제거) ───────────────────────
             vad_filter=True,
@@ -121,6 +129,7 @@ def transcribe_video(video_path: Path, model: "WhisperModel") -> Optional[Path]:
             # ── 추론 품질 ────────────────────────────────────────────────
             beam_size=5,
             temperature=[0.0, 0.2, 0.4, 0.6],  # 불확실 구간 temperature 순차 상승
+            max_new_tokens=70,                  # 세그먼트당 최대 토큰 제한 (보조 뭉침 방지)
             word_timestamps=False,              # SRT 생성에 불필요
         )
 
@@ -135,10 +144,13 @@ def transcribe_video(video_path: Path, model: "WhisperModel") -> Optional[Path]:
                 str(video_path),
                 language="ja",
                 condition_on_previous_text=False,
+                no_speech_threshold=0.5,
                 compression_ratio_threshold=2.4,
+                initial_prompt=INITIAL_PROMPT,
                 vad_filter=False,
                 beam_size=5,
                 temperature=[0.0, 0.2, 0.4, 0.6],
+                max_new_tokens=70,
                 word_timestamps=False,
             )
             lines, idx = _collect_segments(segments2)
