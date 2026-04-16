@@ -1,7 +1,7 @@
 """구어체 변환 모듈 - 번역된 한국어를 자연스러운 구어체 자막으로 변환"""
 import re
 import config
-from hallucination import clean_hallucination
+from hallucination import clean_hallucination, replace_japanese_phonetics
 
 # "너는 X야" 패턴 제거 → 직접 지시형으로 변경해 프롬프트 누출 위험 감소
 SYSTEM_PROMPT = """한국어 자막 구어체 변환기.
@@ -13,6 +13,11 @@ SYSTEM_PROMPT = """한국어 자막 구어체 변환기.
 ~한다/이다 → ~해/야
 ~것이다 → ~거야
 딱딱한 표현 → 일상 대화체
+
+단어 교정 (일본어 음차 오류 수정):
+맨크/마크/망고/맨쿠/만코/음부 → 보지
+찐찐/찐포/낑낑/틴틴/찐따 → 자지
+치쿠비/치쿠미/치크베 → 젖꼭지
 
 주의:
 - 변환된 문장만 출력 (설명, 접두어, 지시문 출력 금지)
@@ -47,8 +52,12 @@ def make_colloquial(text: str) -> str:
     """
     if not text or not text.strip():
         return text
+
+    # 일본어 음차 오류 교정 (LM Studio 실행 여부와 무관하게 항상 적용)
+    text = replace_japanese_phonetics(text)
+
     if config.LOCAL_LLM_CLIENT is None:
-        return text  # LM Studio 미실행 시 원본 반환
+        return text  # LM Studio 미실행 시 교정된 텍스트 반환
     try:
         response = config.LOCAL_LLM_CLIENT.chat.completions.create(
             model=config.LOCAL_MODEL_NAME,

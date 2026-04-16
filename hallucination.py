@@ -1,5 +1,27 @@
 import re
 
+# 일본어 음차 오류 교정 사전 (올바른 단어 → 잘못된 음차 변형 목록)
+_PHONETIC_CORRECTIONS: dict[str, list[str]] = {
+    '보지': ['맨크', '마크', '망고', '맨쿠', '마이크', '만코', '허벅지', '손주', '음부'],
+    '자지': ['찐찐', '치즈', '꼬리', '신포', '찐포', '진키', '좆', '찐찐군', '오챠프',
+             '진진', '전선', '낑낑', '팅팅', '버섯', '틴틴', '진저', '고추', '찐따', '첸첸'],
+    '젖꼭지': ['치쿠미', '바이코', '치카리', '치크레', '치쿠비', '손목', '곰팡이',
+               '징크스', '젖먹이', '치크베'],
+}
+
+
+def replace_japanese_phonetics(text: str) -> str:
+    """일본어 음차로 잘못 변환된 단어를 올바른 한국어 속어로 교정.
+
+    앞뒤에 한글이 이어지지 않는 경우에만 교체하여 다른 단어의 부분 일치를 방지한다.
+    예: '마크가' → '보지가', '치쿠비를' → '젖꼭지를'
+    """
+    for correct, variants in _PHONETIC_CORRECTIONS.items():
+        for variant in variants:
+            pattern = rf'(?<![가-힣]){re.escape(variant)}(?![가-힣])'
+            text = re.sub(pattern, correct, text)
+    return text
+
 
 def remove_repeated_patterns(text: str) -> str:
     """
@@ -57,6 +79,8 @@ def clean_hallucination(text: str) -> str:
     4. 120글자 이상 줄 제거
     5. 영문자 포함 줄 제거
     6. 연속 공백·줄바꿈 정리
+
+    참고: 일본어 음차 오류 교정은 replace_japanese_phonetics()에서 별도 처리.
     """
     text = remove_repeated_patterns(text)
     if not text:
