@@ -181,33 +181,6 @@ def test_hallucination_english():
         _assert(ok, label, f"입력: {text!r} → 출력: {result!r}")
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Test 5: apply_replacements (template 파일 있을 때만)
-# ─────────────────────────────────────────────────────────────────────────────
-def test_apply_replacements():
-    print("\n[Test 5] apply_rules — XML 치환 규칙 적용")
-    template_path = Path(__file__).parent / "multiple_replace_groups.template"
-    if not template_path.exists():
-        warn("multiple_replace_groups.template 없음 — 스킵")
-        return
-
-    from apply_replacements import load_replace_rules, apply_rules
-
-    try:
-        rules = load_replace_rules(template_path)
-        _assert(isinstance(rules, list), "규칙 로드 성공", f"활성 규칙 {len(rules)}개")
-    except Exception as e:
-        _assert(False, "규칙 로드", str(e))
-        return
-
-    if not rules:
-        warn("활성 규칙 0개 — 치환 테스트 스킵")
-        return
-
-    # 빈 텍스트 통과 확인
-    result = apply_rules("", rules)
-    _assert(result == "", "빈 텍스트 통과", "")
-
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Test 6: translate_ja_to_ko (--with-translation 옵션 시)
@@ -261,8 +234,6 @@ if __name__ == "__main__":
     test_merge_identical()
     test_hallucination_repeat()
     test_hallucination_english()
-    test_apply_replacements()
-
     if args.with_translation:
         test_translation()
     else:

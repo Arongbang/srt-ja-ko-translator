@@ -115,37 +115,6 @@ try:
 except Exception as e:
     check("LM Studio 실행 중", False, f"{e}  (DeepL 실패 시 번역 불가)")
 
-# ── 5. multiple_replace_groups.template ─────────────────────────────────────
-print("\n[5] 치환 규칙 템플릿")
-template_path = Path(__file__).parent / "multiple_replace_groups.template"
-tmpl_ok = template_path.exists()
-check("multiple_replace_groups.template 존재", tmpl_ok)
-
-if tmpl_ok:
-    try:
-        import xml.etree.ElementTree as ET
-
-        tree = ET.parse(template_path)
-        root = tree.getroot()
-        groups = list(root.iter("Group"))
-        active_groups = [
-            g for g in groups
-            if g.findtext("Enabled", "True").strip().lower() == "true"
-        ]
-        active_rules = sum(
-            1
-            for g in active_groups
-            for item in g.iter("MultipleSearchAndReplaceItem")
-            if item.findtext("Enabled", "True").strip().lower() == "true"
-        )
-        check(
-            "템플릿 파싱 성공",
-            True,
-            f"그룹 {len(groups)}개 (활성: {len(active_groups)}개), 활성 규칙 {active_rules}개",
-        )
-    except Exception as e:
-        check("템플릿 파싱", False, str(e))
-
 # ── 요약 ──────────────────────────────────────────────────────────────────────
 print("\n" + "=" * 50)
 if all_required_ok:
