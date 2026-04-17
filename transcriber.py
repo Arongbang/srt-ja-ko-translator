@@ -10,8 +10,25 @@ transcriber.py — faster-whisper 기반 영상 → SRT 자막 추출 모듈
 """
 from __future__ import annotations
 
+import os
+import site
+import sys
 from pathlib import Path
 from typing import Optional
+
+# pip으로 설치된 nvidia CUDA DLL(cublas64_12.dll 등)을 ctranslate2가 찾을 수 있도록
+# faster_whisper import 전에 Windows DLL 검색 경로에 등록
+if sys.platform == "win32":
+    _nvidia_bin_candidates = [
+        os.path.join(sp, "nvidia", "cublas", "bin")
+        for sp in (site.getsitepackages() + [site.getusersitepackages()])
+    ]
+    for _bin in _nvidia_bin_candidates:
+        if os.path.isdir(_bin):
+            try:
+                os.add_dll_directory(_bin)
+            except Exception:
+                pass
 
 # 런타임 import — faster-whisper 미설치 환경에서도 모듈 로드 자체는 성공
 try:
