@@ -324,6 +324,32 @@ def _apply_colloquial_to_srt(srt_content: str) -> str:
     return "\n".join(result_lines).rstrip() + "\n"
 
 
+def apply_colloquial_only(bak_path: Path, index: int = 1, total: int = 1) -> None:
+    """
+    .ko.srt.bak(DeepL 원문 백업)을 읽어 구어체 변환만 재실행하고
+    .ko.srt를 덮어씁니다.
+    """
+    ts_start = time.time()
+    ts_label = datetime.now().strftime("%H:%M:%S")
+    output_path = bak_path.with_suffix("")  # .ko.srt.bak → .ko.srt
+    print(f"\n[{ts_label}] ({index}/{total}) 구어체 변환: {bak_path.name}")
+
+    try:
+        translated_content = bak_path.read_text(encoding="utf-8-sig")
+        block_count = _count_blocks(translated_content)
+        _log(f"블록 수: {block_count}")
+
+        t0 = time.time()
+        colloquial_content = _apply_colloquial_to_srt(translated_content)
+        output_path.write_text(colloquial_content, encoding="utf-8-sig")
+        _log(f"구어체 변환 완료 ({time.time() - t0:.1f}s) → {output_path.name}")
+        _log(f"완료 ✓  총 소요: {time.time() - ts_start:.1f}s")
+
+    except Exception as e:
+        _log(f"!!! 오류 발생: {e}")
+        raise
+
+
 def _count_blocks(srt_content: str) -> int:
     """SRT 문자열에서 자막 블록 수를 셉니다."""
     return len(_parse_srt_blocks(srt_content))

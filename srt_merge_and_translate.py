@@ -7,7 +7,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 import config
-from srt_processor import get_srt_files, process_srt_file
+from srt_processor import get_srt_files, process_srt_file, apply_colloquial_only
 from transcriber import transcribe_folder
 
 
@@ -47,6 +47,11 @@ def main():
         action="store_true",
         help="환각 제거 단계를 건너뜁니다 (원인 분리 디버깅용)",
     )
+    parser.add_argument(
+        "--only-colloquial",
+        action="store_true",
+        help=".ko.srt.bak(DeepL 원문)을 입력으로 구어체 변환만 재실행합니다",
+    )
     args = parser.parse_args()
 
     # 디버깅 플래그를 config 전역에 반영
@@ -78,6 +83,20 @@ def main():
 
     if args.only_transcribe:
         print("===== --only-transcribe: 자막 추출 완료, 번역 단계 건너뜀 =====")
+        return
+
+    # ── 구어체 변환만 재실행 ─────────────────────────────────────────────────
+    if args.only_colloquial:
+        print("===== --only-colloquial: .ko.srt.bak → 구어체 변환 재실행 =====")
+        bak_files = list(folder_path.rglob("*.ko.srt.bak"))
+        if not bak_files:
+            print("처리할 .ko.srt.bak 파일이 없습니다. (번역을 먼저 실행하세요)")
+            sys.exit(1)
+        print(f"발견된 백업 파일 수: {len(bak_files)}\n")
+        for i, bak_file in enumerate(bak_files, start=1):
+            apply_colloquial_only(bak_file, index=i, total=len(bak_files))
+            print()
+        print("===== 구어체 변환 재실행 완료 =====")
         return
 
     # ── 번역 단계: DeepL 초기화 ──────────────────────────────────────────────

@@ -16,19 +16,22 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-# pip으로 설치된 nvidia CUDA DLL(cublas64_12.dll 등)을 ctranslate2가 찾을 수 있도록
-# faster_whisper import 전에 Windows DLL 검색 경로에 등록
+# ctranslate2 C++ 확장은 LoadLibraryW로 CUDA DLL을 로드하므로 PATH 환경변수 수정 필수
+# (os.add_dll_directory는 LoadLibraryEx 경로에만 적용 — ctranslate2에 효과 없음)
 if sys.platform == "win32":
-    _nvidia_bin_candidates = [
-        os.path.join(sp, "nvidia", "cublas", "bin")
-        for sp in (site.getsitepackages() + [site.getusersitepackages()])
-    ]
-    for _bin in _nvidia_bin_candidates:
-        if os.path.isdir(_bin):
-            try:
-                os.add_dll_directory(_bin)
-            except Exception:
-                pass
+    _current_path = os.environ.get("PATH", "")
+    for _sp in site.getsitepackages() + [site.getusersitepackages()]:
+        _nvidia_base = os.path.join(_sp, "nvidia")
+        if not os.path.isdir(_nvidia_base):
+            continue
+        for _subdir in os.listdir(_nvidia_base):
+            _bin = os.path.join(_nvidia_base, _subdir, "bin")
+            if os.path.isdir(_bin) and _bin not in _current_path:
+                os.environ["PATH"] = _bin + os.pathsep + os.environ["PATH"]
+                try:
+                    os.add_dll_directory(_bin)
+                except Exception:
+                    pass
 
 # 런타임 import — faster-whisper 미설치 환경에서도 모듈 로드 자체는 성공
 try:

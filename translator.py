@@ -67,6 +67,9 @@ def translate_ja_to_ko(text: str) -> str:
 
 def _translate_with_local_llm(text: str) -> str:
     """로컬 LLM(LM Studio)으로 번역합니다. DeepL 폴백용."""
+    if config.LOCAL_LLM_CLIENT is None:
+        _stats["failed"] += 1
+        return f"[번역 실패 - LM Studio 미연결] {text}"
     try:
         response = config.LOCAL_LLM_CLIENT.chat.completions.create(
             model=config.LOCAL_MODEL_NAME,
@@ -97,7 +100,7 @@ def _translate_with_local_llm(text: str) -> str:
             temperature=0.25,      # 낮춰서 설명문 붙는 거 최대한 방지
             max_tokens=512,
             top_p=0.92,
-            repetition_penalty=1.1,   # 반복이나 설명문 붙는 거 줄임
+            extra_body={"repetition_penalty": 1.1},   # 반복이나 설명문 붙는 거 줄임
         )
         translated = response.choices[0].message.content.strip()
         result = clean_hallucination(translated)

@@ -69,7 +69,7 @@ def make_colloquial(text: str) -> str:
             temperature=0.3,
             max_tokens=256,
             top_p=0.92,
-            repetition_penalty=1.15,  # 반복 환각(자〜〜〜 등) 억제
+            extra_body={"repetition_penalty": 1.15},  # 반복 환각(자〜〜〜 등) 억제
         )
         result = response.choices[0].message.content.strip()
         if not result or _is_prompt_leak(result):
@@ -77,5 +77,6 @@ def make_colloquial(text: str) -> str:
         # 구어체 변환 결과의 환각(반복 문자, 비한글 잔류 등) 제거
         cleaned = clean_hallucination(result)
         return cleaned if cleaned else text  # 환각 제거 후 빈 결과면 원본 반환
-    except Exception:
-        return text  # 오류 시 원본 반환 (silent fallback)
+    except Exception as e:
+        print(f"[구어체 변환 오류] {e}")
+        return text  # 오류 시 원본 반환
