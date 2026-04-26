@@ -73,86 +73,6 @@ def _format_timestamp(seconds: float) -> str:
     return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
 
 
-def _split_text_into_chunks(text: str, max_chars: int) -> list[str]:
-    """
-    텍스트를 max_chars 이하 청크로 분할한다.
-    구두점(。！？…) 위치에서 먼저 자르고, 없으면 균등 분할.
-    """
-    if len(text) <= max_chars:
-        return [text]
-
-    # 구두점 기준으로 청크 구성
-    chunks: list[str] = []
-    current: list[str] = []
-    for char in text:
-        current.append(char)
-        if char in '。！？…':
-            chunks.append(''.join(current))
-            current = []
-    if current:
-        chunks.append(''.join(current))
-
-    # 구두점 분할로도 max_chars 초과하는 청크는 균등 분할로 재처리
-    result: list[str] = []
-    for chunk in chunks:
-        if len(chunk) <= max_chars:
-            result.append(chunk)
-        else:
-            for i in range(0, len(chunk), max_chars):
-                result.append(chunk[i:i + max_chars])
-    return [c for c in result if c]
-
-
-def split_long_captions(srt_content: str, max_chars: int = 20) -> str:
-    """
-    공백 제외 글자 수가 max_chars를 초과하는 자막 블록을 분할한다.
-
-    Whisper가 10~20초 대사를 하나의 블록으로 뭉친 경우 구제용.
-    타임스탬프는 글자 수 비율로 선형 보간하므로 ±0.5초 오차 가능.
-    분할 기준: 구두점(。！？…) 우선 → 균등 분할 폴백.
-    """
-    blocks = _parse_srt_blocks(srt_content)
-    result: list[list[str]] = []
-
-    for block in blocks:
-        if len(block) < 3:
-            result.append(block)
-            continue
-
-        time_line = block[1]
-        text = ' '.join(block[2:]).strip()
-        text_clean = re.sub(r'\s+', '', text)
-
-        if len(text_clean) <= max_chars:
-            result.append(block)
-            continue
-
-        parts = time_line.split('-->')
-        start_sec = _parse_timestamp(parts[0].strip())
-        end_sec = _parse_timestamp(parts[1].strip())
-        duration = end_sec - start_sec
-
-        chunks = _split_text_into_chunks(text_clean, max_chars)
-
-        if len(chunks) <= 1:
-            result.append(block)
-            continue
-
-        # 글자 수 비율로 타임스탬프 보간
-        total_chars = len(text_clean)
-        char_offset = 0
-        for chunk in chunks:
-            chunk_start = start_sec + duration * (char_offset / total_chars)
-            char_offset += len(chunk)
-            chunk_end = start_sec + duration * (char_offset / total_chars)
-            result.append([
-                block[0],
-                f"{_format_timestamp(chunk_start)} --> {_format_timestamp(chunk_end)}",
-                chunk,
-            ])
-
-    return _rebuild_srt(result)
-
 
 def merge_single_char_captions(srt_content: str) -> str:
     """
@@ -404,26 +324,16 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1) -> None:
         original_content = filepath.read_text(encoding="utf-8-sig")
         orig_blocks = _count_blocks(original_content)
 
-        # ── Step 2: 긴 자막 분할 ─────────────────────────────────────
-        # Whisper가 여러 문장을 하나로 뭉친 블록(20글자 초과)을 구두점 기준으로 분리
-        t0 = time.time()
-        split_content = split_long_captions(original_content, max_chars=20)
-        after_split = _count_blocks(split_content)
-        if after_split != orig_blocks:
-            _log(f"긴 자막 분할: {orig_blocks}블록 → {after_split}블록 ({time.time() - t0:.1f}s)")
-        else:
-            _log(f"긴 자막 분할: 분할 대상 없음 ({time.time() - t0:.1f}s)")
-
         # ── Step 3: 1글자 병합 ───────────────────────────────────────
         t0 = time.time()
-        merged_content = merge_single_char_captions(split_content)
+        merged_content = merge_single_char_captions(original_content)
         after_single = _count_blocks(merged_content)
 
         # ── Step 4: 중복 자막 병합 ───────────────────────────────────
         merged_content = merge_identical_captions(merged_content)
         after_dup = _count_blocks(merged_content)
         _log(
-            f"병합: {after_split}블록 → 1글자병합 {after_single}블록 → 중복제거 {after_dup}블록 "
+            f"병합: {orig_blocks}블록 → 1글자병합 {after_single}블록 → 중복제거 {after_dup}블록 "
             f"({time.time() - t0:.1f}s)"
         )
 
