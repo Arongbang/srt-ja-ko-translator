@@ -136,7 +136,7 @@ def transcribe_video(video_path: Path, model: "WhisperModel") -> Optional[Path]:
 
             # ── 환각 억제 핵심 파라미터 ──────────────────────────────────
             condition_on_previous_text=False,  # 이전 구간 환각 전파 차단
-            no_speech_threshold=0.5,           # 기본(0.6)보다 낮게 — 조용한 대화도 음성 처리
+            no_speech_threshold=0.85,          # 높게 설정 — 조용한 대사도 버리지 않음 (XXL 기준)
             compression_ratio_threshold=2.4,   # 반복 압축비 높으면 환각 의심
 
             # ── 일본어 대화 컨텍스트 힌트 ────────────────────────────────
@@ -164,7 +164,7 @@ def transcribe_video(video_path: Path, model: "WhisperModel") -> Optional[Path]:
                 str(video_path),
                 language="ja",
                 condition_on_previous_text=False,
-                no_speech_threshold=0.5,
+                no_speech_threshold=0.85,
                 compression_ratio_threshold=2.4,
                 initial_prompt=INITIAL_PROMPT,
                 vad_filter=False,
