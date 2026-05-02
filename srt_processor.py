@@ -6,7 +6,7 @@ from pathlib import Path
 
 import config
 from colloquial import make_colloquial
-from hallucination import remove_repeated_patterns, remove_english_line
+from hallucination import remove_repeated_patterns
 from translator import translate_ja_to_ko, reset_stats, get_stats
 
 
@@ -28,6 +28,14 @@ def remove_little_rest_phrases(line: str) -> str:
     """
     pattern = r'(\s)?少(\s)?し(\s)?休[^\.。\,\?]{1,}[\.。\,\?]{1,}'
     return re.sub(pattern, '', line)
+
+
+def normalize_alpha_kun(line: str) -> str:
+    """
+    영문자+君 표기(예: J君)를 영문자+K(예: JK)로 정규화합니다.
+    DeepL이 'J君' 같은 혼합 표기를 잘 처리하지 못하므로 JK로 통일합니다.
+    """
+    return re.sub(r'([A-Za-z])\s*君', r'\1K', line)
 
 
 def _parse_srt_blocks(srt_content: str) -> list[list[str]]:
@@ -95,7 +103,7 @@ def merge_single_char_captions(srt_content: str) -> str:
         time_line = block[1]
 
         for j in range(2, len(block)):
-            block[j] = remove_little_rest_phrases(block[j])
+            block[j] = normalize_alpha_kun(remove_little_rest_phrases(block[j]))
 
         text_parts = block[2:]
         text = ' '.join(text_parts).strip()
@@ -354,7 +362,7 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1) -> None:
                 in_text = True
                 filtered_lines.append(line)
             elif in_text:
-                cleaned = remove_repeated_patterns(remove_english_line(line))
+                cleaned = remove_repeated_patterns(line)
                 if cleaned != line:
                     removed_lines += 1
                 filtered_lines.append(cleaned)
