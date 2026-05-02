@@ -5,7 +5,6 @@ from datetime import datetime
 from pathlib import Path
 
 import config
-from colloquial import make_colloquial
 from hallucination import remove_repeated_patterns
 from translator import translate_ja_to_ko, reset_stats, get_stats
 
@@ -210,73 +209,6 @@ def _translate_srt_content(srt_content: str) -> str:
     return "\n".join(translated_lines).rstrip() + "\n"
 
 
-def _apply_colloquial_to_srt(srt_content: str) -> str:
-    """번역된 SRT의 텍스트 블록에만 구어체 변환을 적용합니다."""
-    lines = srt_content.splitlines()
-    result_lines: list[str] = []
-    in_text_block = False
-    current_text: list[str] = []
-
-    def flush_colloquial():
-        if current_text:
-            colloquial = make_colloquial("\n".join(current_text))
-            result_lines.extend(colloquial.splitlines())
-            current_text.clear()
-
-    for line in lines:
-        stripped = line.strip()
-
-        if not stripped:
-            flush_colloquial()
-            result_lines.append("")
-            in_text_block = False
-            continue
-
-        if re.match(r'^\d+$', stripped):
-            flush_colloquial()
-            result_lines.append(line)
-            in_text_block = False
-            continue
-
-        if "-->" in stripped:
-            result_lines.append(line)
-            in_text_block = True
-            continue
-
-        if in_text_block:
-            current_text.append(line)
-        else:
-            result_lines.append(line)
-
-    flush_colloquial()
-    return "\n".join(result_lines).rstrip() + "\n"
-
-
-def apply_colloquial_only(bak_path: Path, index: int = 1, total: int = 1) -> None:
-    """
-    .ko.srt.bak(DeepL 원문 백업)을 읽어 구어체 변환만 재실행하고
-    .ko.srt를 덮어씁니다.
-    """
-    ts_start = time.time()
-    ts_label = datetime.now().strftime("%H:%M:%S")
-    output_path = bak_path.with_suffix("")  # .ko.srt.bak → .ko.srt
-    print(f"\n[{ts_label}] ({index}/{total}) 구어체 변환: {bak_path.name}")
-
-    try:
-        translated_content = bak_path.read_text(encoding="utf-8-sig")
-        block_count = _count_blocks(translated_content)
-        _log(f"블록 수: {block_count}")
-
-        t0 = time.time()
-        colloquial_content = _apply_colloquial_to_srt(translated_content)
-        output_path.write_text(colloquial_content, encoding="utf-8-sig")
-        _log(f"구어체 변환 완료 ({time.time() - t0:.1f}s) → {output_path.name}")
-        _log(f"완료 ✓  총 소요: {time.time() - ts_start:.1f}s")
-
-    except Exception as e:
-        _log(f"!!! 오류 발생: {e}")
-        raise
-
 
 def _count_blocks(srt_content: str) -> int:
     """SRT 문자열에서 자막 블록 수를 셉니다."""
@@ -399,16 +331,9 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1) -> None:
                 print("    " + " | ".join(b))
             return
 
-        # ── Step 8: 원문 번역본 백업 & 구어체 변환 후 .ko.srt 저장 ──
-        bak_path = output_path.with_suffix(output_path.suffix + '.bak')
+        # ── Step 8: 번역 결과 .ko.srt 저장 ──
         output_path.write_text(translated_content, encoding="utf-8-sig")
-        shutil.copy2(output_path, bak_path)
-        _log(f"번역 백업 저장: {bak_path.name}")
-
-        t0 = time.time()
-        colloquial_content = _apply_colloquial_to_srt(translated_content)
-        output_path.write_text(colloquial_content, encoding="utf-8-sig")
-        _log(f"구어체 변환 완료 ({time.time() - t0:.1f}s) → {output_path.name}")
+        _log(f"저장 완료 → {output_path.name}")
 
         elapsed_total = time.time() - ts_start
         _log(f"완료 ✓  총 소요: {elapsed_total:.1f}s")
