@@ -5,8 +5,11 @@ transcriber.py — faster-whisper 기반 영상 → SRT 자막 추출 모듈
 핵심 설정:
   - condition_on_previous_text=False : 이전 구간 환각이 다음 구간으로 전파되는 것 차단
   - vad_filter=True                  : 배경음악·신음 등 비대화 구간 자동 제거
-  - no_speech_threshold=0.5          : 기본(0.6)보다 낮게 — 조용한 대화도 음성으로 처리
-  - initial_prompt                   : 일본어 대화 힌트로 비언어 소리 오역 억제
+  - no_speech_threshold=0.85         : 높게 설정 — 조용한 대사도 버리지 않음
+  - log_prob_threshold=-0.2          : 낮은 신뢰도 세그먼트 제거 (기본값 미설정)
+  - compression_ratio_threshold=1.7  : 반복 패턴 엄격히 필터링 (기본 2.4보다 낮음)
+  - best_of=5                        : 5개 후보 중 최선 선택 → 품질 향상
+  - initial_prompt                   : 자연스러운 일본어 대화 예시로 초반 인식률 향상
 """
 from __future__ import annotations
 
@@ -57,9 +60,12 @@ VAD_PARAMETERS = {
     "speech_pad_ms": 400,            # 음성 앞뒤 여백 400ms — 인접 청크 오디오 중복 방지
 }
 
-# Whisper initial_prompt: 일본어 대화 컨텍스트 힌트
-# 비언어 소리(신음)를 일본어 글자로 오역하는 것을 억제하는 효과
-INITIAL_PROMPT = "日本語の会話。ささやき声や小声の台詞も含む。"  # "일본어 대화. 속삭임이나 작은 목소리의 대사도 포함."
+# Whisper initial_prompt: 실제 대화 예시 문장으로 초반 세그먼트 인식률 향상
+# Whisper는 이 텍스트를 "이전에 인식된 컨텍스트"로 처리 → 자연스러운 일본어 대화 패턴 힌트 제공
+INITIAL_PROMPT = (
+    "日本語の会話。ねえ、そうだよ、わかった、ちょっと待って。"
+    "ゆっくりな口調も早口も、ささやきも大きな声も含む。"
+)
 
 
 # ── 내부 헬퍼 ─────────────────────────────────────────────────────────────────
@@ -135,12 +141,13 @@ def transcribe_video(video_path: Path, model: "WhisperModel") -> Optional[Path]:
             language="ja",
 
             # ── 환각 억제 핵심 파라미터 ──────────────────────────────────
-            condition_on_previous_text=False,  # 이전 구간 환각 전파 차단
-            no_speech_threshold=0.85,          # 높게 설정 — 조용한 대사도 버리지 않음 (XXL 기준)
-            compression_ratio_threshold=2.4,   # 반복 압축비 높으면 환각 의심
+            condition_on_previous_text=False,   # 이전 구간 환각 전파 차단
+            no_speech_threshold=0.85,           # 높게 설정 — 조용한 대사도 버리지 않음
+            log_prob_threshold=-0.2,            # 신뢰도 낮은 세그먼트 제거
+            compression_ratio_threshold=1.7,    # 반복 패턴 엄격 필터 (기본 2.4보다 낮음)
 
             # ── 일본어 대화 컨텍스트 힌트 ────────────────────────────────
-            initial_prompt=INITIAL_PROMPT,     # 비언어 소리 오역 억제 + 대화체 인식 향상
+            initial_prompt=INITIAL_PROMPT,      # 자연스러운 대화 예시로 초반 인식률 향상
 
             # ── VAD (배경음악·신음 구간 자동 제거) ───────────────────────
             vad_filter=True,
@@ -148,8 +155,9 @@ def transcribe_video(video_path: Path, model: "WhisperModel") -> Optional[Path]:
 
             # ── 추론 품질 ────────────────────────────────────────────────
             beam_size=5,
-            temperature=[0.0, 0.2, 0.4, 0.6],  # 불확실 구간 temperature 순차 상승
-            max_new_tokens=70,                  # 세그먼트당 최대 토큰 제한 (보조 뭉침 방지)
+            best_of=5,                          # 5개 후보 중 최선 선택
+            temperature=0,                      # 고정 온도로 일관성 확보
+            max_new_tokens=70,                  # 세그먼트당 최대 토큰 제한
             word_timestamps=False,              # SRT 생성에 불필요
         )
 
@@ -165,11 +173,13 @@ def transcribe_video(video_path: Path, model: "WhisperModel") -> Optional[Path]:
                 language="ja",
                 condition_on_previous_text=False,
                 no_speech_threshold=0.85,
-                compression_ratio_threshold=2.4,
+                log_prob_threshold=-0.2,
+                compression_ratio_threshold=1.7,
                 initial_prompt=INITIAL_PROMPT,
                 vad_filter=False,
                 beam_size=5,
-                temperature=[0.0, 0.2, 0.4, 0.6],
+                best_of=5,
+                temperature=0,
                 max_new_tokens=70,
                 word_timestamps=False,
             )
