@@ -39,8 +39,11 @@ def remove_repeated_patterns(text: str) -> str:
     # 1. 단일 문자 5회 이상 연속 반복 제거
     text = re.sub(r'(.)\1{4,}', '', text)
 
-    # 2. 다중 문자 구문(2~15자) 2회 이상 연속 반복 → 첫 1회만 남김
-    text = re.sub(r'(.{2,15})\1+', r'\1', text)
+    # 2. 다중 문자 구문 연속 반복 → 첫 1회만 남김
+    # 2글자 패턴은 3회 이상일 때만 제거 (そろそろ·だんだん 등 일본어 의태어/의성어 보호)
+    text = re.sub(r'(.{2})\1{2,}', r'\1', text)
+    # 3~15글자 패턴은 2회 이상이면 환각으로 판단
+    text = re.sub(r'(.{3,15})\1+', r'\1', text)
     text = text.strip()
     if not text:
         return ''
