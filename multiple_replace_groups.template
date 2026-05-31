@@ -19,6 +19,13 @@
         <SearchType>RegularExpression</SearchType>
         <Description>ㄱ - 가버렸</Description>
       </MultipleSearchAndReplaceItem>
+	  <MultipleSearchAndReplaceItem>
+        <Enabled>True</Enabled>
+        <FindWhat>공개해서</FindWhat>
+        <ReplaceWith>가버려서</ReplaceWith>
+        <SearchType>RegularExpression</SearchType>
+        <Description>ㄱ - 가버려서</Description>
+      </MultipleSearchAndReplaceItem>
       <MultipleSearchAndReplaceItem>
         <Enabled>True</Enabled>
         <FindWhat>잇짱|말하면</FindWhat>
@@ -999,6 +1006,13 @@
         <ReplaceWith>자지가</ReplaceWith>
         <SearchType>RegularExpression</SearchType>
         <Description>ㅈ - 자지가</Description>
+      </MultipleSearchAndReplaceItem>
+	  <MultipleSearchAndReplaceItem>
+        <Enabled>True</Enabled>
+        <FindWhat>자지은</FindWhat>
+        <ReplaceWith>자지는</ReplaceWith>
+        <SearchType>RegularExpression</SearchType>
+        <Description>ㅈ - 자지는</Description>
       </MultipleSearchAndReplaceItem>
       <MultipleSearchAndReplaceItem>
         <Enabled>True</Enabled>
