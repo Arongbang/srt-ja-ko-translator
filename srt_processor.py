@@ -335,6 +335,9 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
         # ── Step 8: template 치환 규칙 적용 ──────────────────────────
         if replace_rules:
             t0 = time.time()
+            ko_bak_path = output_path.with_name(output_path.name + ".bak")
+            ko_bak_path.write_text(translated_content, encoding="utf-8-sig")
+            _log(f"치환 전 백업 저장: {ko_bak_path.name}")
             translated_content = apply_rules(translated_content, replace_rules)
             _log(f"template 치환 완료 ({time.time() - t0:.1f}s)")
 
