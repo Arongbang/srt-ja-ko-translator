@@ -7,6 +7,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 import config
+from apply_replacements import load_replace_rules, apply_rules
 from srt_processor import get_srt_files, process_srt_file
 from transcriber import transcribe_folder
 
@@ -47,6 +48,11 @@ def main():
         action="store_true",
         help="환각 제거 단계를 건너뜁니다 (원인 분리 디버깅용)",
     )
+    parser.add_argument(
+        "--only-replace",
+        action="store_true",
+        help="이미 번역된 .ko.srt 파일에 치환 규칙만 다시 적용합니다 (번역 건너뜀)",
+    )
     args = parser.parse_args()
 
     # 디버깅 플래그를 config 전역에 반영
@@ -80,8 +86,43 @@ def main():
         print("===== --only-transcribe: 자막 추출 완료, 번역 단계 건너뜀 =====")
         return
 
+    if args.only_replace:
+        template_path = Path(__file__).parent / "multiple_replace_groups.template"
+        replace_rules = load_replace_rules(template_path) if template_path.exists() else []
+        if not replace_rules:
+            print("치환 규칙 없음 — 종료합니다.")
+            return
+        print(f"치환 규칙 로드 완료: {len(replace_rules)}개")
+
+        ko_srt_files = sorted(folder_path.rglob("*.ko.srt"))
+        if not ko_srt_files:
+            print("해당 폴더에 .ko.srt 파일이 없습니다.")
+            return
+
+        print(f"발견된 .ko.srt 파일 수: {len(ko_srt_files)}\n")
+        for i, ko_srt in enumerate(ko_srt_files, 1):
+            print(f"[{i}/{len(ko_srt_files)}] {ko_srt.name}")
+            content = ko_srt.read_text(encoding="utf-8-sig")
+            new_content = apply_rules(content, replace_rules)
+            if config.dry_run:
+                print(new_content)
+            else:
+                bak_path = ko_srt.with_name(ko_srt.name + ".bak")
+                bak_path.write_text(content, encoding="utf-8-sig")
+                ko_srt.write_text(new_content, encoding="utf-8-sig")
+                print("  → 백업 생성 및 치환 완료")
+        print("===== 치환 완료 =====")
+        return
+
     # ── 번역 단계: DeepL 초기화 ──────────────────────────────────────────────
     config.initialize()
+
+    template_path = Path(__file__).parent / "multiple_replace_groups.template"
+    replace_rules = load_replace_rules(template_path) if template_path.exists() else []
+    if replace_rules:
+        print(f"치환 규칙 로드 완료: {len(replace_rules)}개")
+    else:
+        print("치환 규칙 없음 (multiple_replace_groups.template 미존재 또는 규칙 없음)")
 
     srt_files = get_srt_files(folder_path)
 
@@ -94,7 +135,7 @@ def main():
     print(f"발견된 .srt 파일 수: {len(srt_files)}\n")
 
     for i, srt_file in enumerate(srt_files, start=1):
-        process_srt_file(srt_file, index=i, total=len(srt_files))
+        process_srt_file(srt_file, index=i, total=len(srt_files), replace_rules=replace_rules)
         print()
 
     print("===== 모든 파일 처리 완료 =====")

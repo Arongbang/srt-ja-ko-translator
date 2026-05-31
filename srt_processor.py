@@ -5,6 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 import config
+from apply_replacements import apply_rules
 from hallucination import remove_repeated_patterns
 from translator import translate_ja_to_ko, reset_stats, get_stats
 
@@ -220,7 +221,7 @@ def _log(msg: str) -> None:
     print(f"  [{ts}] {msg}")
 
 
-def process_srt_file(filepath: Path, index: int = 1, total: int = 1) -> None:
+def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rules: list | None = None) -> None:
     """
     하나의 .srt 파일을 처리합니다.
 
@@ -331,7 +332,13 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1) -> None:
                 print("    " + " | ".join(b))
             return
 
-        # ── Step 8: 번역 결과 .ko.srt 저장 ──
+        # ── Step 8: template 치환 규칙 적용 ──────────────────────────
+        if replace_rules:
+            t0 = time.time()
+            translated_content = apply_rules(translated_content, replace_rules)
+            _log(f"template 치환 완료 ({time.time() - t0:.1f}s)")
+
+        # ── Step 9: 번역 결과 .ko.srt 저장 ──
         output_path.write_text(translated_content, encoding="utf-8-sig")
         _log(f"저장 완료 → {output_path.name}")
 
