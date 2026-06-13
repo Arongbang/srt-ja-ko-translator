@@ -2,14 +2,10 @@ import sys
 import os
 import deepl
 from dotenv import load_dotenv
-from openai import OpenAI
 
 load_dotenv()
 
-LOCAL_MODEL_NAME = "ja-ko-vn-12b-v2"
-
 deepl_translator: deepl.Translator | None = None
-LOCAL_LLM_CLIENT: OpenAI | None = None
 usage = None
 used = 0
 limit = 0
@@ -22,7 +18,7 @@ skip_hallucination: bool = False
 
 
 def initialize() -> None:
-    global deepl_translator, LOCAL_LLM_CLIENT, usage, used, limit, remaining
+    global deepl_translator, usage, used, limit, remaining
 
     DEEPL_API_KEY = os.getenv("DEEPL_API_KEY")
     if not DEEPL_API_KEY:
@@ -42,11 +38,6 @@ def initialize() -> None:
     used = usage.character.count
     limit = usage.character.limit
     remaining = limit - used
-
-    LOCAL_LLM_CLIENT = OpenAI(
-        base_url="http://127.0.0.1:1234/v1",
-        api_key="lm-studio",
-    )
 
 
 def refresh_usage() -> None:

@@ -38,7 +38,7 @@ check(f"Python {sys.version.split()[0]}", py_ok, "" if py_ok else "(3.7 이상 �
 
 # ── 2. 필수 패키지 ───────────────────────────────────────────────────────────
 print("\n[2] 필수 패키지")
-REQUIRED = ["deepl", "dotenv", "openai", "regex"]
+REQUIRED = ["deepl", "dotenv", "regex"]
 OPTIONAL = ["faster_whisper"]
 
 all_required_ok = True
@@ -85,35 +85,11 @@ try:
                 f"사용: {used:,} / {limit:,} 자  (남음: {remaining:,} 자)",
             )
             if remaining == 0:
-                print(f"  {WARN}  DeepL 잔여 한도 0 — 로컬 LLM 폴백만 사용됩니다")
+                print(f"  {WARN}  DeepL 잔여 한도 0 — 번역 실패 가능")
         except Exception as e:
             check("DeepL API 응답", False, str(e))
 except Exception as e:
     check("dotenv 로드", False, str(e))
-
-# ── 4. LM Studio (로컬 LLM) ──────────────────────────────────────────────────
-print("\n[4] LM Studio (로컬 LLM 폴백)")
-try:
-    import urllib.request
-    import json as _json
-
-    req = urllib.request.Request(
-        "http://127.0.0.1:1234/v1/models",
-        headers={"Accept": "application/json"},
-    )
-    with urllib.request.urlopen(req, timeout=3) as resp:
-        data = _json.loads(resp.read())
-    models = [m["id"] for m in data.get("data", [])]
-    check("LM Studio 실행 중", True, f"모델 {len(models)}개 로드됨")
-    target = "ja-ko-vn-12b-v2"
-    target_ok = any(target in m for m in models)
-    check(
-        f"모델 '{target}' 로드됨",
-        target_ok,
-        "" if target_ok else f"사용 가능 모델: {models}",
-    )
-except Exception as e:
-    check("LM Studio 실행 중", False, f"{e}  (DeepL 실패 시 번역 불가)")
 
 # ── 요약 ──────────────────────────────────────────────────────────────────────
 print("\n" + "=" * 50)

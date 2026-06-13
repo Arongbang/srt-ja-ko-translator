@@ -254,7 +254,7 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
         _log("경고: character 사용량 정보가 유효하지 않습니다. (무료 플랜 외일 수 있음)")
 
     if config.remaining == 0:
-        _log("→ 로컬 모델 사용하여 번역 진행")
+        _log("경고: DeepL 잔여 한도 0 — 번역 실패 가능")
 
     try:
         # ── Step 1: 백업 ─────────────────────────────────────────────
@@ -318,10 +318,10 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
         t0 = time.time()
         translated_content = _translate_srt_content(merged_content)
         stats = get_stats()
-        total_translated = stats["deepl"] + stats["llm"] + stats["failed"]
+        total_translated = stats["deepl"] + stats["failed"]
         elapsed = time.time() - t0
         _log(
-            f"번역 완료: DeepL={stats['deepl']} / LLM폴백={stats['llm']} / 실패={stats['failed']} "
+            f"번역 완료: DeepL={stats['deepl']} / 실패={stats['failed']} "
             f"(총 {total_translated}블록, {elapsed:.1f}s)"
         )
 
