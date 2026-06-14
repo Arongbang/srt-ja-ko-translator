@@ -1,0 +1,1551 @@
+{
+  "categories": [
+    {
+      "name": "2.\uBCC0\uD658",
+      "rules": []
+    },
+    {
+      "name": "2-1.\uBA85\uC0AC/\uD615\uC6A9\uC0AC/\uBD80\uC0AC \uBCC0\uD658 (\uBC14\uAFC0\uB0B4\uC6A9)",
+      "rules": []
+    },
+    {
+      "name": "2-1-1.\u3131\u3134\u3137\u3139",
+      "rules": [
+        {
+          "find": "\uB2E4\uB140\uC654",
+          "replaceWith": "\uAC00\uBC84\uB838",
+          "description": "\u3131 - \uAC00\uBC84\uB838",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uACF5\uAC1C\uD574\uC11C",
+          "replaceWith": "\uAC00\uBC84\uB824\uC11C",
+          "description": "\u3131 - \uAC00\uBC84\uB824\uC11C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC787\uC9F1|\uB9D0\uD558\uBA74",
+          "replaceWith": "\uAC00\uBC84\uB9AC\uBA74",
+          "description": "\u3131 - \uAC00\uBC84\uB9AC\uBA74",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAC00\\?",
+          "replaceWith": "\uAC00\uC694?",
+          "description": "\u3131 - \uAC00\uC694?",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC7A0\uB4E4 \uAC83|\uC77C\uC5B4\uB0A0 \uAC83",
+          "replaceWith": "\uAC08 \uAC83",
+          "description": "\u3131 - \uAC08 \uAC83",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD55C\uAEBC\uBC88\uC5D0\\.",
+          "replaceWith": "\uAC19\uC774.",
+          "description": "\u3131 - \uAC19\uC774.",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAF5D\uAF5D",
+          "replaceWith": "\uAC74\uBC30",
+          "description": "\u3131 - \uAC74\uBC30",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCE58\uC5F4\uD574\uC9C0\uACE0",
+          "replaceWith": "\uACA9\uB82C\uD574\uC9C0\uACE0",
+          "description": "\u3131 - \uACA9\uB82C\uD574\uC9C0\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBE44\uB09C\uD558\uB294",
+          "replaceWith": "\uAD34\uB86D\uD600\uC9C0\uB294",
+          "description": "\u3131 - \uAD34\uB86D\uD600\uC9C0\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBE44\uB09C\uBC1B\uC73C\uBA74",
+          "replaceWith": "\uAD34\uB86D\uD600\uC9C0\uBA74",
+          "description": "\u3131 - \uAD34\uB86D\uD600\uC9C0\uBA74",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBE44\uB09C\uC744",
+          "replaceWith": "\uAD34\uB86D\uD798\uC744",
+          "description": "\u3131 - \uAD34\uB86D\uD798\uC744",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB2EB\uD600\uC788\uC9C0",
+          "replaceWith": "\uAF49 \uC870\uC774\uC9C0",
+          "description": "\u3131 - \uAF49 \uC870\uC774\uC9C0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC090\uAC71\uAC70\uB838",
+          "replaceWith": "\uAFC0\uAEBD\uD574\uBC84\uB838",
+          "description": "\u3131 - \uAFC0\uAEBD\uD574\uBC84\uB838",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBA38\uB9AC\uB85C|\uC911\uAE4C\uC9C0",
+          "replaceWith": "\uB05D\uAE4C\uC9C0",
+          "description": "\u3131 - \uB05D\uAE4C\uC9C0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB9E4\uB294",
+          "replaceWith": "\uB07C\uB294",
+          "description": "\u3131 - \uB07C\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBD99\uC5EC\uBCFC",
+          "replaceWith": "\uB07C\uC6CC\uBCFC",
+          "description": "\u3131 - \uB07C\uC6CC\uBCFC",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBD99\uC774\uB824",
+          "replaceWith": "\uB07C\uC6CC\uC8FC\uB824",
+          "description": "\u3131 - \uB07C\uC6CC\uC8FC\uB824",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB2EC\uC544\uC904",
+          "replaceWith": "\uB07C\uC6CC\uC904",
+          "description": "\u3131 - \uB07C\uC6CC\uC904",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB2EC\uC544\uC92C",
+          "replaceWith": "\uB07C\uC6CC\uC92C",
+          "description": "\u3131 - \uB07C\uC6CC\uC92C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(?\u003C!\uC090\uAC71)\uC090\uAC71\uAC70\uB9AC\uACE0",
+          "replaceWith": "\uB098\uC624\uACE0",
+          "description": "\u3134 - \uB098\uC624\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC790\uACE0 \uC788\uB2E4(?!\uACE0|\uB358|\uBA74|\uB4E0|\uB294|\uB9CC|\uB2C8|\uB354|\uAC00)",
+          "replaceWith": "\uB098\uC624\uACE0 \uC788\uB2E4",
+          "description": "\u3134 - \uB098\uC624\uACE0 \uC788\uB2E4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCE74\uB80C",
+          "replaceWith": "\uB0A8\uCE5C",
+          "description": "\u3134 - \uB0A8\uCE5C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB4E4\uC5B4\uAC00\uB3C4",
+          "replaceWith": "\uB123\uC5B4\uB3C4",
+          "description": "\u3134 - \uB123\uC5B4\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCC0C\uB4E4\uC5B4 \uC788\uAE30",
+          "replaceWith": "\uB290\uB07C\uAE30",
+          "description": "\u3134 - \uB290\uB07C\uAE30",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB290\uB08C \uC788\uB294",
+          "replaceWith": "\uB290\uB07C\uB294",
+          "description": "\u3134 - \uB290\uB07C\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB290\uB9AC\uC9C0\uB9CC",
+          "replaceWith": "\uB2A6\uC5C8\uC9C0\uB9CC",
+          "description": "\u3134 - \uB2A6\uC5C8\uC9C0\uB9CC",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC57C\uC2DC\uC2DC",
+          "replaceWith": "\uB2E4\uC815",
+          "description": "\u3137 - \uB2E4\uC815",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBE44\uB09C\uBC1B\uB294",
+          "replaceWith": "\uB2F9\uD558\uB294",
+          "description": "\u3137 - \uB2F9\uD558\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAC00\uB85C\uC9C0\uB974\uACE0",
+          "replaceWith": "\uB2FF\uACE0",
+          "description": "\u3137 - \uB2FF\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uBC14\uC774!|\uC57C\uBC14\uC544|\uC57C\uBE44\uD558\uB2E4!|\uC57C\uBC14\\.|^\uC548 \uB418\uACA0\uB2E4\\.)",
+          "replaceWith": "\uB300\uBC15.",
+          "description": "\u3137 - \uB300\uBC15",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD64B \uD558\uACE0 \uD574",
+          "replaceWith": "\uB354 \uD574",
+          "description": "\u3137 - \uB354 \uD574",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC2B5\uACA9\uB2F9\uD558\uB294",
+          "replaceWith": "\uB36E\uCCD0\uC9C0\uB294",
+          "description": "\u3137 - \uB36E\uCCD0\uC9C0\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC9C0\uB0B4\uC2DC\uAE38",
+          "replaceWith": "\uB418\uAE38",
+          "description": "\u3137 - \uB418\uAE38",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD1A0\uD558\uB294",
+          "replaceWith": "\uB4E4\uC5B4\uAC04",
+          "description": "\u3137 - \uB4E4\uC5B4\uAC04",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBEE3\uBEE3",
+          "replaceWith": "\uB531\uB531",
+          "description": "\u3137 - \uB531\uB531",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAD73\uC5B4\uC84C",
+          "replaceWith": "\uB531\uB531\uD574\uC84C",
+          "description": "\u3137 - \uB531\uB531\uD574\uC84C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC090\uAC71\uAC70\uB9AC\uB294",
+          "replaceWith": "\uB538\uCE58\uB294",
+          "description": "\u3137 - \uB538\uCE58\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\u808C",
+          "replaceWith": "\uB610 ",
+          "description": "\u3137 - \uB610",
+          "isActive": true,
+          "type": "RegularExpression"
+        }
+      ]
+    },
+    {
+      "name": "2-1-2.\u3141\u3142\u3145\u3147",
+      "rules": [
+        {
+          "find": "\uBFDC\uBFDC|\uD479\uC2E0",
+          "replaceWith": "\uB9D0\uB791",
+          "description": "\u3141 - \uB9D0\uB791",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBF40\uAE00|\uBC14\uC0AD|\uC2DC\uCF54|\uCAC0\uB4DD|\uCC14\uCC14",
+          "replaceWith": "\uBB38\uC9C8",
+          "description": "\u3141 - \uBB38\uC9C8",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAC78\uB838",
+          "replaceWith": "\uBB3B\uC5C8",
+          "description": "\u3141 - \uBB4D\uC5C8",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBBF8\uC778\uC57D|\uBBF8\uD559|\uBE4C(?!\uB824|\uB838)",
+          "replaceWith": "\uBBF8\uC57D",
+          "description": "\u3141 - \uBBF8\uC57D",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(?\u003C!\uC548\uB0B4)(\\s)?\uBC1B\uC73C\uBA74",
+          "replaceWith": "\uBC15\uC73C\uBA74",
+          "description": "\u3142 - \uBC15\uC73C\uBA74",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCC14\uB9B4",
+          "replaceWith": "\uBC15\uD790",
+          "description": "\u3142 - \uBC15\uD790",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBC1C\uC544",
+          "replaceWith": "\uBC1C\uAE30",
+          "description": "\u3142 - \uBC1C\uAE30",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB611\uB531\uAC70\uB9AC\uACE0",
+          "replaceWith": "\uBC1C\uAE30\uD558\uACE0",
+          "description": "\u3142 - \uBC1C\uAE30\uD558\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAF2C\uC774\uB294 \uAC83\uC744",
+          "replaceWith": "\uBC1C\uAE30\uD558\uB294 \uAC70",
+          "description": "\u3142 - \uBC1C\uAE30\uD558\uB294 \uAC70",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC878\uB824\uC694",
+          "replaceWith": "\uBC1C\uAE30\uD588\uB124\uC694",
+          "description": "\u3142 - \uBC1C\uAE30\uD588\uB124\uC694",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCC0D\uC73C\uBA74",
+          "replaceWith": "\uBC97\uC73C\uBA74",
+          "description": "\u3142 - \uBC97\uC73C\uBA74",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC774\uCE58",
+          "replaceWith": "\uBCC0\uD0DC",
+          "description": "\u3142 - \uBCC0\uD0DC",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD5C8\uBC85\uC9C0|\uC190\uC8FC|\uB17C\uB9E8\uCF54|\uB9E8\uCFE0|(?\u003C!\uCC98)\uC74C\uBD80|\uAC15\uC544\uC9C0|\uD131|\uC5EC\uBCF4,|\uB9C8\uD06C|\uB9DD\uACE0|\uB9E8\uD06C|\uB9C8\uC774\uD06C|\uB9CC\uCF54",
+          "replaceWith": "\uBCF4\uC9C0",
+          "description": "\u3142 - \uBCF4\uC9C0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD3ED\uD3EC \uB0C4\uC0C8|\uC0AC\uB791 \uC561",
+          "replaceWith": "\uBCF4\uC9D3\uBB3C",
+          "description": "\u3142 - \uBCF4\uC9D3\uBB3C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBCF4\uC9D3\uBB3C\uAC00",
+          "replaceWith": "\uBCF4\uC9D3\uBB3C\uC774",
+          "description": "\u3142 - \uBCF4\uC9D3\uBB3C\uC774",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uD638\uB85C\uD638\uB85C)",
+          "replaceWith": "\uBD80\uB4E4\uBD80\uB4E4",
+          "description": "\u3142 - \uBD80\uB4E4\uBD80\uB4E4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uCC98\uC74C|\uC624\uB298)(\uC5D4|\uC5D0\uC11C \uBE44\uB86F\uB41C \uAC83\uC774)",
+          "replaceWith": "$1\uBD80\uD130",
+          "description": "\u3142 - \uBD80\uD130",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uC624\uB298)\uC5D0\uC11C",
+          "replaceWith": "$1\uBD80\uD130",
+          "description": "\u3142 - \uBD80\uD130",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBB34\uB77C\uBB34\uB77C",
+          "replaceWith": "\uBD88\uB048\uBD88\uB048",
+          "description": "\u3142 - \uBD88\uB048\uBD88\uB048",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC77D\uC5B4",
+          "replaceWith": "\uBD88\uB7EC",
+          "description": "\u3142 - \uBD88\uB7EC",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB2EC\uAC40|\uAE08\uC625",
+          "replaceWith": "\uBD88\uC54C",
+          "description": "\u3142 - \uBD88\uC54C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB3C5\uC124\uC744|\uBDF0\uBDF0\uAC00",
+          "replaceWith": "\uBDF0\uB987\uBDF0\uB987",
+          "description": "\u3142 - \uBDF0\uB987\uBDF0\uB987",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uC090\uAC71\uAC70\uB9AC\uB294 \uAC8C)",
+          "replaceWith": "\uBE59\uAE00\uBE59\uAE00",
+          "description": "\u3142 - \uBE59\uAE00\uBE59\uAE00",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC18D\uB294 \uAC83\uC744",
+          "replaceWith": "\uBE59\uAE00\uBE59\uAE00",
+          "description": "\u3142 - \uBE59\uAE00\uBE59\uAE00",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD565\uB294",
+          "replaceWith": "\uBE60\uB294",
+          "description": "\u3142 - \uBE60\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD565\uAC8C",
+          "replaceWith": "\uBE68\uAC8C",
+          "description": "\u3142 - \uBE68\uAC8C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD565\uACE0",
+          "replaceWith": "\uBE68\uACE0",
+          "description": "\u3142 - \uBE68\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD565\uB4EF\uC774",
+          "replaceWith": "\uBE68\uB4EF\uC774",
+          "description": "\u3142 - \uBE68\uB4EF\uC774",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD565\uC5EC\uC11C",
+          "replaceWith": "\uBE68\uB824\uC11C",
+          "description": "\u3142 - \uBE68\uB824\uC11C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD565\uD788\uB294",
+          "replaceWith": "\uBE68\uB9AC\uB294",
+          "description": "\u3142 - \uBE68\uB9AC\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB07C\uC6CC\uB3C4|\uD565\uC544\uB3C4|\uB9C8\uC154\uB3C4",
+          "replaceWith": "\uBE68\uC544\uB3C4",
+          "description": "\u3142 - \uBE68\uC544\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD565\uC544\uC8FC",
+          "replaceWith": "\uBE68\uC544\uC8FC",
+          "description": "\u3142 - \uBE68\uC544\uC8FC",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCE04\uCE04",
+          "replaceWith": "\uBF40\uBF40",
+          "description": "\u3142 - \uBF40\uBF40",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC2A4\uCF00\uCE58",
+          "replaceWith": "\uC0AC\uC815",
+          "description": "\u3145 - \uC0AC\uC815",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC9C0\uB098\uAC00 ",
+          "replaceWith": "\uC11C ",
+          "description": "\u3145 - \uC11C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC13C\uC2A4\uCF00|\uC13C\uD0A4",
+          "replaceWith": "\uC120\uBC30",
+          "description": "\u3145 - \uC120\uBC30",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\u5148\u751F|\uC138\uC138\uD788|\uAE30\uAECF\uD574\uC57C|\uC13C\uC2DC",
+          "replaceWith": "\uC120\uC0DD\uB2D8",
+          "description": "\u3145 - \uC120\uC0DD\uB2D8",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC138\uD504\uB808",
+          "replaceWith": "\uC139\uD30C",
+          "description": "\u3145 - \uC139\uD30C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC870\uADF8\uB9E3\uAC8C \uB9D0\uD558",
+          "replaceWith": "\uC18C\uB9AC\uB098",
+          "description": "\u3145 - \uC18C\uB9AC\uB098",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD504\uB77C\uBAA8\uB378",
+          "replaceWith": "\uC18D\uC637",
+          "description": "\u3145 - \uC18D\uC637",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC5D0\uC774\uBE0C",
+          "replaceWith": "\uC218\uC601\uBD80",
+          "description": "\u3145 - \uC218\uC601\uBD80",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC5B4\uAE68\uB97C \uC73C\uC4F1\uD558\uACA0",
+          "replaceWith": "\uC2E4\uB840\uD558\uACA0",
+          "description": "\u3145 - \uC2E4\uB840\uD558\uACA0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC57C\uB2E4",
+          "replaceWith": "\uC2EB\uC5B4",
+          "description": "\u3145 - \uC2EB\uC5B4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB0A0\uB77C\uB2E4",
+          "replaceWith": "\uC2F8",
+          "description": "\u3145 - \uC2F8",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD37C\uBD93\uACE0|\uBF08\uB97C \uBC97\uAE30\uACE0",
+          "replaceWith": "\uC2F8\uACE0",
+          "description": "\u3145 - \uC2F8\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\\s\uB0B4\uACE0\\s\uC2F6",
+          "replaceWith": " \uC2F8\uACE0 \uC2F6",
+          "description": "\u3145 - \uC2F8\uACE0 \uC2F6",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAEBC\uB0B4\uB3C4|\uB0B4\uB3C4",
+          "replaceWith": "\uC2F8\uB3C4",
+          "description": "\u3145 - \uC2F8\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB0B4\uBC84\uB824\uB46C\uC57C",
+          "replaceWith": "\uC2F8\uBC84\uB824\uC57C",
+          "description": "\u3145 - \uC2F8\uBC84\uB824\uC57C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB0B4\uBC84\uB9AC\uBA74|\uB0B4\uBCF4\uB0B4\uBA74",
+          "replaceWith": "\uC2F8\uBC84\uB9AC\uBA74",
+          "description": "\u3145 - \uC2F8\uBC84\uB9AC\uBA74",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB0B4\uC8FC\uC168|\uB9CC\uB4E4\uC5B4 \uC8FC\uC168|\uC6B8\uACE0 \uC788\uC5C8",
+          "replaceWith": "\uC2F8\uC8FC\uC168",
+          "description": "\u3145 - \uC2F8\uC8FC\uC168",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB0B4\uB194([\\.\\,]{1,})",
+          "replaceWith": "\uC2F8\uC918$1",
+          "description": "\u3145 - \uC2F8\uC918.",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAEBC\uB0B4\uC918\uC11C|\uB0B4\uC8FC\uC154\uC11C",
+          "replaceWith": "\uC2F8\uC918\uC11C",
+          "description": "\u3145 - \uC2F8\uC918\uC11C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(?\u003C!\uBAA9\uC18C\uB9AC)\\s\uB0B4\uC9C0\\s",
+          "replaceWith": " \uC2F8\uC9C0 ",
+          "description": "\u3145 - \uC2F8\uC9C0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD070 \uAC70(?\u003E!\uC2DC)",
+          "replaceWith": "\uC2FC \uAC70",
+          "description": "\u3145 - \uC2FC \uAC70",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\\s\uAEBC\uB0B8\\s\uC9C0\\s",
+          "replaceWith": " \uC2FC \uC9C0",
+          "description": "\u3145 - \uC2FC \uC9C0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB5A8\uC5B4\uC9C8 \uAC83",
+          "replaceWith": "\uC300 \uAC83",
+          "description": "\u3145 - \uC300 \uAC83",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB0C8\uB294\uB370",
+          "replaceWith": "\uC30C\uB294\uB370",
+          "description": "\u3145 - \uC30C\uB294\uB370",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB0B4\uB1A8\uB354\uB2C8|\uC2DC\uC791\uD588\uB294\uB370\uB3C4|\uC0AC\uC9C4\uC744 \uCC0D\uACE0 \uC788\uB294\uB370(\uB3C4)?",
+          "replaceWith": "\uC30C\uB294\uB370\uB3C4",
+          "description": "\u3145 - \uC30C\uB294\uB370\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD398\uC5B4",
+          "replaceWith": "2\uC778",
+          "description": "\u3147 - 2\uC778",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC544\uD0A4\uB3C4",
+          "replaceWith": "\uC544\uAE4C\uBD80\uD130",
+          "description": "\u3147 - \uC544\uAE4C\uBD80\uD130",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBA70\uB290\uB9AC",
+          "replaceWith": "\uC544\uB0B4",
+          "description": "\u3147 - \uC544\uB0B4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC0B0\uBD80",
+          "replaceWith": "\uC544\uB2E4",
+          "description": "\u3147 - \uC544\uB2E4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC911\uD558\uC911\uC744",
+          "replaceWith": "\uC548\uC5D0",
+          "description": "\u3147 - \uC548\uC5D0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB0B4\uBC84\uB824\uB450[\uC5C8\uC168]{1}",
+          "replaceWith": "\uC548\uC5D0 \uC2F8\uC168",
+          "description": "\u3147 - \uC548\uC5D0 \uC2F8\uC168",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC6B8\uC9C0 \uB9C8\uC138",
+          "replaceWith": "\uC548\uC5D0 \uC2F8\uC8FC\uC138",
+          "description": "\u3147 - \uC548\uC5D0 \uC2F8\uC8FC\uC138",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC0AC\uC774\uB3C4",
+          "replaceWith": "\uC548\uC5D0\uB3C4",
+          "description": "\u3147 - \uC548\uC5D0\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB3C5\uD558\uAC8C \uB9D0\uD558",
+          "replaceWith": "\uC548\uC5D0\uC11C \uBDF0\uB987\uBDF0\uB987\uD558",
+          "description": "\u3147 - \uC548\uC5D0\uC11C \uBDF0\uB987\uBDF0\uB987\uD558",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(?\u003C!\uBC97\uACA8|\uAC00)\uBC84\uB9AC\uACE0",
+          "replaceWith": "\uC54C\uBA74\uC11C\uB3C4",
+          "description": "\u3147 - \uC54C\uBA74\uC11C\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC544\uC9F1",
+          "replaceWith": "\uC560\uAE30",
+          "description": "\u3147 - \uC560\uAE30",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB728\uAC81\uC9C0",
+          "replaceWith": "\uC57C\uD558\uC9C0",
+          "description": "\u3147 - \uC57C\uD558\uC9C0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD5E4\uCE58 ",
+          "replaceWith": "\uC57C\uD55C ",
+          "description": "\u3147 - \uC57C\uD55C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC5D0\uCE58",
+          "replaceWith": "\uC57C\uD55C \uAC70",
+          "description": "\u3147 - \uC57C\uD55C \uAC70",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uC5D0\uCE58|\uD5E4\uCE58)\uC758 \uC18C\uB9AC",
+          "replaceWith": "\uC57C\uD55C \uC18C\uB9AC",
+          "description": "\u3147 - \uC57C\uD55C \uC18C\uB9AC",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD55C \uBC88\uB9CC \uC640\uB3C4",
+          "replaceWith": "\uC5B8\uC81C\uB4E0\uC9C0 \uC640\uB3C4",
+          "description": "\u3147 - \uC5B8\uC81C\uB4E0\uC9C0 \uC640\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC5C4\uCCAD\uB098\uAC8C|\uB9E4\uC6B0",
+          "replaceWith": "\uC5C4\uCCAD",
+          "description": "\u3147 - \uC5C4\uCCAD",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBC1C(\uC774)",
+          "replaceWith": "\uC5C9\uB369\uC774",
+          "description": "\u3147 - \uC5C9\uB369\uC774",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBF40\uB85C\uB85C\uB85C",
+          "replaceWith": "\uC5C9\uB9DD\uC9C4\uCC3D",
+          "description": "\u3147 - \uC5C9\uB9DD\uC9C4\uCC3D",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC744 \uD6D4\uCCD0\uAC00\uB3C4",
+          "replaceWith": "\uC5D0 \uC2F8\uB3C4",
+          "description": "\u3147 - \uC5D0 \uC2F8\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC5D4\uD2B8\uB9AC",
+          "replaceWith": "\uC5D4\uB4DC\uB9AC\uC2A4",
+          "description": "\u3147 - \uC5D4\uB4DC\uB9AC\uC2A4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uADF8\uB140|\uADF8 \uC5EC\uC790|\uAC00\uB098\uC720 \uC528|\uB098\uB098\uBBF8 \uC528|\uC5B4\uBA38\uB098,|\uAC00\uB098\uC774\uC18C \uC528",
+          "replaceWith": "\uC5EC\uCE5C",
+          "description": "\u3147 - \uC5EC\uCE5C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC5EC\uCE5C(\uC640|\uB791)",
+          "replaceWith": "\uC5EC\uCE5C\uC774\uB791",
+          "description": "\u3147 - \uC5EC\uCE5C\uC774\uB791",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD30C\uB9AC\uC9F1",
+          "replaceWith": "\uC5ED\uC2DC",
+          "description": "\u3147 - \uC5ED\uC2DC",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB204\uB098|(?\u003C!\uCC98|\uC778|\uD589|\uAC70|\uC7AC)\uD615(\uB2D8)?(?!\uBD80|\uD0DC)([\uC774\uC81C\uC73C])?|\uC5B8\uB2C8|\uC624\uB2C8|\uADC0\uC2E0(\uC774|\uB2D8)?",
+          "replaceWith": "\uC624\uBE60",
+          "description": "\u3147 - \uC624\uBE60",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD615\uACFC",
+          "replaceWith": "\uC624\uBE60\uB791",
+          "description": "\u3147 - \uC624\uBE60\uB791",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC544\uC77C",
+          "replaceWith": "\uC624\uC77C",
+          "description": "\u3147 - \uC624\uC77C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAE30\uB984",
+          "replaceWith": "\uC624\uC77C",
+          "description": "\u3147 - \uC624\uC77C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBE44\uCF54\uBE44\uCF54|\uCAD1\uAE0B\uCAD1\uAE0B|\uBBF8\uCFE0\uBBF8\uCFE0|\uAC81\uBA39\uC740\\.|\uC090\uB057\uC090\uB057|\uD53C\uCF54\uB9AC\uCF54(?:\uB77C\uACE0)?|\uC090\uAC71\uC090\uAC71",
+          "replaceWith": "\uC6C0\uCC14\uC6C0\uCC14",
+          "description": "\u3147 - \uC6C0\uCC14\uC6C0\uCC14",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB180\uB77C\uAC8C \uD574\uC92C\uC5B4",
+          "replaceWith": "\uC6C0\uCC14\uC6C0\uCC14\uAC70\uB824",
+          "description": "\u3147 - \uC6C0\uCC14\uC6C0\uCC14\uAC70\uB824",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAC81\uBA39\uACE0 \uACC4\uC2DC|\uAE5C\uC9DD \uAE5C\uC9DD \uB180\uB77C",
+          "replaceWith": "\uC6C0\uCC14\uC6C0\uCC14\uAC70\uB9AC",
+          "description": "\u3147 - \uC6C0\uCC14\uC6C0\uCC14\uAC70\uB9AC",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAC81\uBA39\uACE0",
+          "replaceWith": "\uC6C0\uCC14\uC6C0\uCC14\uAC70\uB9AC\uACE0",
+          "description": "\u3147 - \uC6C0\uCC14\uC6C0\uCC14\uAC70\uB9AC\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAC81\uBA39\uC5C8",
+          "replaceWith": "\uC6C0\uCC14\uC6C0\uCC14\uD588",
+          "description": "\u3147 - \uC6C0\uCC14\uC6C0\uCC14\uD588",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAF2C\uB9AC\uAF2C\uB9AC",
+          "replaceWith": "\uC720\uB450 \uBC1C\uAE30",
+          "description": "\u3147 - \uC720\uB450 \uBC1C\uAE30",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC785\uB95C",
+          "replaceWith": "\uC720\uB95C",
+          "description": "\u3147 - \uC720\uB95C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBBF8\uCCD0\uBC84|^\uAC00 \uB418\uC5B4 \uBC84",
+          "replaceWith": "\uC774\uC0C1\uD558\uAC8C \uB3FC\uBC84",
+          "description": "\u3147 - \uC774\uC0C1\uD558\uAC8C \uB3FC\uBC84",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC774 \uC815\uB3C4\uB294",
+          "replaceWith": "\uC774\uC81C\uBD80\uD130",
+          "description": "\u3147 - \uC774\uC81C\uBD80\uD130",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC785 \uBC16\uC73C\uB85C",
+          "replaceWith": "\uC785 \uC548\uC5D0",
+          "description": "\u3147 - \uC785 \uC548\uC5D0",
+          "isActive": true,
+          "type": "RegularExpression"
+        }
+      ]
+    },
+    {
+      "name": "2-1-3.\u3148\u314A\u314B\u314C",
+      "rules": [
+        {
+          "find": "\uC886|\uAC00\uC815\uC0DD\uD65C|\uCC0C\uB9BF\uCC0C\uB9BF|\uD558\uB8E8|\uCC10\uCC10|\uCE58\uC988|\uAF2C\uB9AC|\uC2E0\uD3EC|\uCC10\uD3EC|\uC9C4\uD0A4|\uC886\uC886|\uCAD1\uCAD1|\uB625|\uCC10\uCC10\uAD70|\uB099\uC5FD|\uC624\uCC60\uD504|\uC9C4\uC9C4|\uC804\uC120|\uC54C\uB9BC|\uB2F9\uADFC|\uB091\uB091|\uBC84\uC12F|\uD305\uD305|\uD2F4\uD2F4|\uC9C4\uC800|\uCC10, \uCC10,|\uCC21, \uCC21,|\uACE0\uCD94|\uCC10\uB530|\uC624\uB9C8\uCE74|\uACE0\uCD94(?\u003E!\uC7A5)|\uCCB8\uCCB8|\uC628\uD150\uCE58|\uCCB4\uC778\uC9C0|\uC5F4\uC815(\uC774)?|\uC624\uCE58\uCE58|\uAC70\uC2DC\uAE30|\uC131\uAE30|\uC9D5\uC9D5(?\u003E!\uAC70)|\uD3EC\uD0A4|\uD560\uC544\uBC84\uC9C0|\uB85C\uCE5C\uD3EC",
+          "replaceWith": "\uC790\uC9C0",
+          "description": "\u3148 -  \uC790\uC9C0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC0AC\uC7A5\uB2D8\uAED8",
+          "replaceWith": "\uC790\uC704",
+          "description": "\u3148 - \uC790\uC704",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC5F4\uC911|\uAC00\uB4DD \uCC44\uC6B0\uACE0(\\,)?|\uD55C \uC794\uC744|\uCEA3\uCE20",
+          "replaceWith": "\uC794\uB729",
+          "description": "\u3148 - \uC794\uB729",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAC00\uB4DD\uD558\uB124\uC694",
+          "replaceWith": "\uC794\uB729 \uC30C\uB124\uC694",
+          "description": "\u3148 - \uC794\uB729 \uC30C\uB124\uC694",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC21C\uC2DD\uAC04\uC5D0\uB77C\uB3C4",
+          "replaceWith": "\uC7A0\uAE50\uC774\uB77C\uB3C4",
+          "description": "\u3148 - \uC7A0\uAE50\uC774\uB77C\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC21C\uC2DD\uAC04\uC5D0\uB77C\uB3C4",
+          "replaceWith": "\uC7A0\uAE50\uC774\uB77C\uB3C4",
+          "description": "\u3148 - \uC7A0\uAE50\uC774\uB77C\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB530\uB77C \uD574\uBCFC",
+          "replaceWith": "\uC7A5\uB09C\uCCD0\uBCFC",
+          "description": "\u3148 - \uC7A5\uB09C\uCCD0\uBCFC",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC561\uCE35|\uC2A4\uD2F8\uCEF7",
+          "replaceWith": "\uC815\uC561",
+          "description": "\u3148 - \uC815\uC561",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC0DD\uC0AC|\uC2EC\uBB38|\uC804\uC0AC|\uB9C8\uC74C\uC18D\uC5D0|\uC190\uC790|\u751F\u6B7B|\uC815\uC2E0",
+          "replaceWith": "\uC815\uC790",
+          "description": "\u3148 - \uC815\uC790",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCE58\uCFE0\uBBF8|\uBC14\uC774\uCF54|\uCE58\uCE74\uB9AC|\uCE58\uD06C\uB808|\uCE58\uCFE0\uBE44|\uC190\uBAA9|\uBAA9(?\u003E!\uC18C)|\uACF0\uD321\uC774|\uC9D5\uD06C\uC2A4|\uC9D1\uC744|\uC816\uBA39\uC774|\uD2B8\uB808\uC774\uCC98|\uD131(?\u003E!\uD131)|\uCE58\uD06C\uBCA0|\uBEA8|\uCE20\uCFE0\uBE44",
+          "replaceWith": "\uC816\uAF2D\uC9C0",
+          "description": "\u3148 - \uC816\uAF2D\uC9C0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBAA9\uC774",
+          "replaceWith": "\uC816\uAF2D\uC9C0\uAC00",
+          "description": "\u3148 - \uC816\uAF2D\uC9C0\uAC00",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBC84\uB824\uC9C0\uBA74",
+          "replaceWith": "\uC816\uC5B4 \uBC84\uB9AC\uBA74",
+          "description": "\u3148 - \uC816\uC5B4 \uBC84\uB9AC\uBA74",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB2EB\uD600\uBC84\uB838",
+          "replaceWith": "\uC870\uC5EC\uBC84\uB838",
+          "description": "\u3148 - \uC870\uC5EC\uBC84\uB838",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uB354 \uBCF4\uAE30\\.|^\uB354\\.$)",
+          "replaceWith": "\uC880 \uB354.",
+          "description": "\u3148 - \uC880 \uB354",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB098\uBE60",
+          "replaceWith": "\uC88B\uC544",
+          "description": "\u3148 - \uC88B\uC544",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": " \uC88B\uAC8C \uC9C0\uB0B4\uC790",
+          "replaceWith": " \uC88B\uC544\uC9C0\uC790",
+          "description": "\u3148 - \uC88B\uC544\uC9C0\uC790",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "^\uAE08 ",
+          "replaceWith": "\uC9C0\uAE08 ",
+          "description": "\u3148 - \uC9C0\uAE08",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCDE8\uD55C",
+          "replaceWith": "\uC9C4\uD55C",
+          "description": "\u3148 - \uC9C4\uD55C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCAC4\uAE43|\uCA5D\uCA5D",
+          "replaceWith": "\uC9C8\uCC99",
+          "description": "\u3148 - \uC9C8\uCC99",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCC28\uAD6C\uCC28\uAD6C(?:\uAC00)?|\uAD6C\uCC0C|\u3073\u3057\u3087\u3073\u3057\u3087",
+          "replaceWith": "\uC9C8\uCC99\uC9C8\uCC99",
+          "description": "\u3148 - \uC9C8\uCC99\uC9C8\uCC99",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC9C0\uB3C5\uD788\uB3C4 \uC9C0\uCCD0\uBC84",
+          "replaceWith": "\uC9C8\uCC99\uC9C8\uCC99\uD574\uC838\uBC84",
+          "description": "\u3148 - \uC9C8\uCC99\uC9C8\uCC99\uD574\uC838\uBC84",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCA54\uCA54\uB9E4\uBA70",
+          "replaceWith": "\uC9C8\uCC99\uC9C8\uCC99\uD574\uC838\uC11C",
+          "description": "\u3148 - \uC9C8\uCC99\uC9C8\uCC99\uD574\uC838\uC11C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCE58 \uCE58\uACE0",
+          "replaceWith": "\uC9C8\uCC99\uC9C8\uCC99\uD574\uC9C0\uACE0",
+          "description": "\u3148 - \uC9C8\uCC99\uC9C8\uCC99\uD574\uC9C0\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCB48\uBF1B",
+          "replaceWith": "\uCC0C\uB9BF",
+          "description": "\u3148 - \uCC0C\uB9BF",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC9D5\uC9D5",
+          "replaceWith": "\uCC0C\uB9BF\uCC0C\uB9BF",
+          "description": "\u3148 - \uCC0C\uB9BF\uCC0C\uB9BF",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC9DC\uC99D\uB098\uB294",
+          "replaceWith": "\uCC10\uB4DD\uD55C",
+          "description": "\u3148 - \uCC10\uB4DD\uD55C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uACE0\uC720\uD574",
+          "replaceWith": "\uCC10\uD574",
+          "description": "\u3148 - \uCC10\uD574",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAE30\uCC2C\uC774\uB77C\uACE0",
+          "replaceWith": "\uC81C\uB300\uB85C",
+          "description": "\u314A - \uC81C\uB300\uB85C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBC84\uD2F0\uACE0|\uBB35\uACE0",
+          "replaceWith": "\uCC38\uACE0",
+          "description": "\u314A - \uCC38\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uACAC\uB514\uB294",
+          "replaceWith": "\uCC38\uB294",
+          "description": "\u314A - \uCC38\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCFE0\uB9AC\uB124",
+          "replaceWith": "\uCC9C\uCC9C\uD788",
+          "description": "\u314A - \uCC9C\uCC9C\uD788",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCD5C\uC18C\\.",
+          "replaceWith": "\uCD5C\uC545.",
+          "description": "\u314A - \uCD5C\uC545.",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBCA8\uB85C\uBCA8\uB85C",
+          "replaceWith": "\uCE04\uB985\uCE04\uB985",
+          "description": "\u314A - \uCE04\uB985\uCE04\uB985",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAD50\uD65C",
+          "replaceWith": "\uCE58\uC0AC",
+          "description": "\u314A - \uCE58\uC0AC",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC138\uBE0C\uB780\uC2A4",
+          "replaceWith": "\uCE5C\uAD6C",
+          "description": "\u314A - \uCE5C\uAD6C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(?\u003C!\uC815)\uC790\uB97C",
+          "replaceWith": "\uCE60",
+          "description": "\u314A - \uCE60",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uCE68)(\uC744|\uB97C)",
+          "replaceWith": "\uCE68",
+          "description": "\u314A - \uCE68",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC21C\uC218\uD574",
+          "replaceWith": "\uCEE4",
+          "description": "\u314B - \uCEE4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD138\uC744 \uC790\uC9C0",
+          "replaceWith": "\uCEE4\uC9C4 \uC790\uC9C0",
+          "description": "\u314B - \uCEE4\uC9C4 \uC790\uC9C0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uACE0\uBB34\uC904|\uBAA8\uCC28",
+          "replaceWith": "\uCF58\uB3D4",
+          "description": "\u314B - \uCF58\uB3D4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCFF5\uCF85",
+          "replaceWith": "\uCFF5",
+          "description": "\u314B - \uCFF5",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uADF8\uB9AC\uD2B8\uB9AC\uC2A4|\uC74C\uD575",
+          "replaceWith": "\uD074\uB9AC",
+          "description": "\u314B - \uD074\uB9AC",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBF40\uBF40|\uD29C\uB2DD|\uC2E4\uC218",
+          "replaceWith": "\uD0A4\uC2A4",
+          "description": "\u314B - \uD0A4\uC2A4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC539\uC5B4\uBCF4",
+          "replaceWith": "\uD0A4\uC2A4\uD558",
+          "description": "\u314B - \uD0A4\uC2A4\uD558",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC539\uACE0",
+          "replaceWith": "\uD0A4\uC2A4\uD558\uACE0",
+          "description": "\u314B - \uD0A4\uC2A4\uD558\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC539\uC73C\uBA74",
+          "replaceWith": "\uD0A4\uC2A4\uD558\uBA74",
+          "description": "\u314B - \uD0A4\uC2A4\uD558\uBA74",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC539\uC5B4 \uBA39\uC5B4\uBCF4\uC790",
+          "replaceWith": "\uD0A4\uC2A4\uD558\uC790",
+          "description": "\u314B - \uD0A4\uC2A4\uD558\uC790",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC539\uB294\uB2E4\uACE0\\?",
+          "replaceWith": "\uD0A4\uC2A4\uD558\uC790\uACE0?",
+          "description": "\u314B - \uD0A4\uC2A4\uD558\uC790\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC539\uC740",
+          "replaceWith": "\uD0A4\uC2A4\uD55C",
+          "description": "\u314B - \uD0A4\uC2A4\uD55C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC539\uC744 \uC218",
+          "replaceWith": "\uD0A4\uC2A4\uD560 \uC218",
+          "description": "\u314B - \uD0A4\uC2A4\uD560 \uC218",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC539\uC5B4\uC8FC\uC138",
+          "replaceWith": "\uD0A4\uC2A4\uD574\uC8FC\uC138",
+          "description": "\u314B - \uD0A4\uC2A4\uD574\uC8FC\uC138",
+          "isActive": true,
+          "type": "RegularExpression"
+        }
+      ]
+    },
+    {
+      "name": "2-1-4.\u314D\u314E",
+      "rules": [
+        {
+          "find": "\uC774\uAE30\uB824\uACE0\uB9CC \uD558\uB294\uAD70\uC694",
+          "replaceWith": "\uD314\uD314\uD558\uB124\uC694",
+          "description": "\u314D - \uD314\uD314\uD558\uB124\uC694",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBE48 \uBE48\uC774\uC796",
+          "replaceWith": "\uD314\uD314\uD558\uC796",
+          "description": "\u314D - \uD314\uD314\uD558\uC796",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBE48\uD2C8\uC774 \uB9CE\uC73C\uBA74",
+          "replaceWith": "\uD314\uD314\uD574\uC11C",
+          "description": "\u314D - \uD314\uD314\uD574\uC11C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBC14\uC9C0(\uB97C)?",
+          "replaceWith": "\uD32C\uD2F0",
+          "description": "\u314D - \uD32C\uD2F0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD30C\uC774\uC624",
+          "replaceWith": "\uD3A0\uB77C|\uD3A0\uB77C\uCE58 ",
+          "description": "\u314D - \uD3A0\uB77C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD489\uD489|\uC090\uC090|\uC090\uBED1\uC090\uBED1",
+          "replaceWith": "\uD4FB\uD4FB",
+          "description": "\u314D - \uD4FB\uD4FB",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD758\uB9AC\uB294",
+          "replaceWith": "\uD53C\uD558\uB294",
+          "description": "\u314D - \uD53C\uD558\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC138~\uC758",
+          "replaceWith": "\uD558\uB098~\uB458",
+          "description": "\u314E - \uD558\uB098~\uB458",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uD565\uAE30\uB97C",
+          "replaceWith": "\uD565\uB294 \uAC70",
+          "description": "\u314E - \uD565\uB294 \uAC70",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBF40\uC1A1",
+          "replaceWith": "\uD565\uC9DD",
+          "description": "\u314E - \uD565\uC9DD",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uCFE0\uC0C1",
+          "replaceWith": "\uD56D\uC0C1",
+          "description": "\u314E - \uD56D\uC0C1",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC774\uC57C\uAE30\uD574",
+          "replaceWith": "\uD574",
+          "description": "\u314E - \uD574",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC6B8\uC5B4\uBC84",
+          "replaceWith": "\uD574\uBC84",
+          "description": "\u314E - \uD574\uBC84",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB370\uB808\uB370\uB808(\uAC00)?",
+          "replaceWith": "\uD5E4\uB871\uD5E4\uB871",
+          "description": "\u314E - \uD5E4\uB871\uD5E4\uB871",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB809\uBBFC",
+          "replaceWith": "\uD600",
+          "description": "\u314E - \uD600",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uAC1A\uC544\uC8FC\uACE0",
+          "replaceWith": "\uD765\uBD84\uD558\uACE0",
+          "description": "\u314E - \uD765\uBD84\uD558\uACE0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uBC8C\uCEE5",
+          "replaceWith": "\uD65C\uC9DD",
+          "description": "\u314E - \uD65C\uC9DD",
+          "isActive": true,
+          "type": "RegularExpression"
+        }
+      ]
+    },
+    {
+      "name": "2-1-5.\uBC30\uC6B0\uC774\uB984",
+      "rules": [
+        {
+          "find": "\uC8FC\uAC71(\uC740)|\uD788\uB85C\uC758|\uD788\uB85C|\uBCD1\uC544\uB9AC\uB4E4",
+          "replaceWith": "\uD788\uB098\uB178",
+          "description": "\u314E - \uD788\uB098\uB178",
+          "isActive": true,
+          "type": "RegularExpression"
+        }
+      ]
+    },
+    {
+      "name": "2-2.\uC870\uC0AC \uBCC0\uD658",
+      "rules": []
+    },
+    {
+      "name": "2-2-1.\uC740/\uB294/\uC744/\uB97C/\uC774/\uAC00",
+      "rules": [
+        {
+          "find": "(\uC5EC\uCE5C|\uC120\uC0DD\uB2D8)\uAC00",
+          "replaceWith": "$1\uC774",
+          "description": " \uAC00 -\u003E \uC774",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uC5EC\uCE5C|\uC120\uC0DD\uB2D8)\uB97C",
+          "replaceWith": "$1\uC744",
+          "description": " \uB97C -\u003E \uC744",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uC5EC\uCE5C|\uC120\uC0DD\uB2D8)\uB294",
+          "replaceWith": "$1\uC740",
+          "description": "\uB294 -\u003E \uC740",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uC790\uC9C0|\uC815\uC790|\uD074\uB9AC|\uC790\uC9C0|\uBCF4\uC9C0|\uC120\uBC30)\uC774",
+          "replaceWith": "$1\uAC00",
+          "description": "\uC774 -\u003E \uAC00",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uD0A4\uC2A4|\uC815\uC790|\uD074\uB9AC|\uC790\uC9C0|\uBCF4\uC9C0|\uC120\uBC30)\uC744",
+          "replaceWith": "$1\uB97C",
+          "description": "\uC744 -\u003E \uB97C",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uD0A4\uC2A4|\uC815\uC790|\uD074\uB9AC|\uC790\uC9C0|\uBCF4\uC9C0|\uC120\uBC30)\uC740",
+          "replaceWith": "$1\uB294",
+          "description": "\uC740 -\u003E \uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uB0B4\uC5B4 \uB9D0\uD574\uB3C4",
+          "replaceWith": "\uB0B4\uB3C4",
+          "description": "\u3134 - \uB0B4\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "(\uC704)\uC5D0\uC11C\uB294",
+          "replaceWith": "$1\uB85C\uB294",
+          "description": "\u3147 - (\uC704)\uB85C\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC548\uC73C\uB85C|\uC18D\uC5D0",
+          "replaceWith": "\uC548\uC5D0",
+          "description": "\u3147 - \uC548\uC5D0",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC560\uC9C0\uC911\uC9C0\uD574\uB3C4",
+          "replaceWith": "\uC751\uC11D\uBD80\uB824\uB3C4",
+          "description": "\u3147 - \uC751\uC11D\uBD80\uB824\uB3C4",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC560\uC9C0\uC911\uC9C0\uD558\uB294",
+          "replaceWith": "\uC751\uC11D\uBD80\uB9AC\uB294",
+          "description": "\u3147 - \uC751\uC11D\uBD80\uB9AC\uB294",
+          "isActive": true,
+          "type": "RegularExpression"
+        },
+        {
+          "find": "\uC560\uC9C0\uC911\uC9C0\uD560",
+          "replaceWith": "\uC751\uC11D\uBD80\uB9B4",
+          "description": "\u3147 - \uC751\uC11D\uBD80\uB9B4",
+          "isActive": true,
+          "type": "RegularExpression"
+        }
+      ]
+    }
+  ]
+}

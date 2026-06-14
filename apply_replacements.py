@@ -1,6 +1,6 @@
+import json
 import re
 import regex
-import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
@@ -11,21 +11,19 @@ def _convert_backrefs(replace: str) -> str:
 
 def load_replace_rules(template_path: Path) -> list[tuple[str, str, bool]]:
     """
-    template 파일에서 활성화된 치환 규칙을 읽어 반환합니다.
+    SE_Replace_Rules.template (JSON) 에서 활성화된 치환 규칙을 읽어 반환합니다.
     반환값: [(find, replace, is_regex), ...]
     """
-    tree = ET.parse(template_path)
-    root = tree.getroot()
+    with template_path.open(encoding="utf-8") as f:
+        data = json.load(f)
 
     rules = []
-    for group in root.iter("Group"):
-        if group.findtext("Enabled", "True").strip().lower() != "true":
-            continue
-        for item in group.iter("MultipleSearchAndReplaceItem"):
-            if item.findtext("Enabled", "True").strip().lower() != "true":
+    for category in data.get("categories", []):
+        for rule in category.get("rules", []):
+            if not rule.get("isActive", True):
                 continue
-            find = item.findtext("FindWhat", "")
-            replace = item.findtext("ReplaceWith", "")
+            find = rule.get("find", "")
+            replace = rule.get("replaceWith", "")
             if find:
                 rules.append((find, _convert_backrefs(replace), True))
 

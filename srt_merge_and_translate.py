@@ -87,7 +87,7 @@ def main():
         return
 
     if args.only_replace:
-        template_path = Path(__file__).parent / "multiple_replace_groups.template"
+        template_path = Path(__file__).parent / "SE_Replace_Rules.template"
         replace_rules = load_replace_rules(template_path) if template_path.exists() else []
         if not replace_rules:
             print("치환 규칙 없음 — 종료합니다.")
@@ -117,12 +117,12 @@ def main():
     # ── 번역 단계: DeepL 초기화 ──────────────────────────────────────────────
     config.initialize()
 
-    template_path = Path(__file__).parent / "multiple_replace_groups.template"
+    template_path = Path(__file__).parent / "SE_Replace_Rules.template"
     replace_rules = load_replace_rules(template_path) if template_path.exists() else []
     if replace_rules:
         print(f"치환 규칙 로드 완료: {len(replace_rules)}개")
     else:
-        print("치환 규칙 없음 (multiple_replace_groups.template 미존재 또는 규칙 없음)")
+        print("치환 규칙 없음 (SE_Replace_Rules.template 미존재 또는 규칙 없음)")
 
     srt_files = get_srt_files(folder_path)
 
