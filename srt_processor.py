@@ -1,13 +1,30 @@
 import re
 import shutil
 import time
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 
 import config
 from apply_replacements import apply_rules
 from hallucination import remove_repeated_patterns
-from translator import translate_ja_to_ko, reset_stats, get_stats
+from translator import translate_ja_to_ko, reset_stats, get_stats, get_failed_texts
+
+STATUS_DONE = "완료"
+STATUS_PARTIAL = "부분 오류"
+STATUS_FAILED = "처리 실패"
+
+
+@dataclass
+class ProcessResult:
+    """process_srt_file()의 처리 결과를 담는 객체."""
+    filename: str
+    status: str
+    error_stage: str | None = None
+    error_message: str | None = None
+    failed_blocks: int = 0
+    total_blocks: int = 0
+    failed_texts: list[str] = field(default_factory=list)
 
 
 def get_srt_files(folder_path: Path) -> list[Path]:
@@ -221,7 +238,7 @@ def _log(msg: str) -> None:
     print(f"  [{ts}] {msg}")
 
 
-def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rules: list | None = None) -> None:
+def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rules: list | None = None) -> ProcessResult:
     """
     하나의 .srt 파일을 처리합니다.
 
@@ -234,6 +251,9 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
 
     이미 .ko.srt가 존재하면 스킵합니다.
     dry_run=True 이면 파일을 실제로 쓰지 않고 콘솔에만 출력합니다.
+
+    예외가 발생해도 이 함수는 raise하지 않고 ProcessResult(status=STATUS_FAILED)를
+    반환합니다 — 한 파일의 오류가 main()의 나머지 파일 처리를 막지 않도록 하기 위함입니다.
     """
     ts_start = time.time()
     ts_label = datetime.now().strftime("%H:%M:%S")
@@ -244,33 +264,38 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
 
     if output_path.exists() and not config.dry_run:
         _log(f"이미 {output_path.name} 파일이 존재합니다. 스킵.")
-        return
+        return ProcessResult(filename=filepath.name, status=STATUS_DONE)
 
-    config.refresh_usage()
-
-    if config.usage.character.valid:
-        _log(f"DeepL 잔여: {config.remaining:,} / {config.limit:,} 자")
-    else:
-        _log("경고: character 사용량 정보가 유효하지 않습니다. (무료 플랜 외일 수 있음)")
-
-    if config.remaining == 0:
-        _log("경고: DeepL 잔여 한도 0 — 번역 실패 가능")
-
+    current_stage = "사용량 조회"
     try:
+        config.refresh_usage()
+
+        if config.usage.character.valid:
+            _log(f"DeepL 잔여: {config.remaining:,} / {config.limit:,} 자")
+        else:
+            _log("경고: character 사용량 정보가 유효하지 않습니다. (무료 플랜 외일 수 있음)")
+
+        if config.remaining == 0:
+            _log("경고: DeepL 잔여 한도 0 — 번역 실패 가능")
+
         # ── Step 1: 백업 ─────────────────────────────────────────────
+        current_stage = "백업"
         if not config.dry_run:
             shutil.copy2(filepath, backup_path)
         _log(f"{'[dry-run] ' if config.dry_run else ''}백업 생성: {backup_path.name}")
 
+        current_stage = "파일 읽기"
         original_content = filepath.read_text(encoding="utf-8-sig")
         orig_blocks = _count_blocks(original_content)
 
         # ── Step 3: 1글자 병합 ───────────────────────────────────────
+        current_stage = "1글자 병합"
         t0 = time.time()
         merged_content = merge_single_char_captions(original_content)
         after_single = _count_blocks(merged_content)
 
         # ── Step 4: 중복 자막 병합 ───────────────────────────────────
+        current_stage = "중복 병합"
         merged_content = merge_identical_captions(merged_content)
         after_dup = _count_blocks(merged_content)
         _log(
@@ -279,6 +304,7 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
         )
 
         # ── Step 5: 반복 패턴 & 영문자 필터 ─────────────────────────
+        current_stage = "반복 패턴 필터"
         t0 = time.time()
         filtered_lines = []
         in_text = False
@@ -305,6 +331,7 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
         _log(f"전처리 필터: {removed_lines}줄 정제됨 ({time.time() - t0:.1f}s)")
 
         # ── Step 6: 원본 덮어쓰기 (변경 시에만) ──────────────────────
+        current_stage = "원본 저장"
         if merged_content.strip() != original_content.strip():
             if not config.dry_run:
                 filepath.write_text(merged_content, encoding="utf-8-sig")
@@ -313,11 +340,13 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
             _log("원본 변경 사항 없음")
 
         # ── Step 7: 번역 ─────────────────────────────────────────────
+        current_stage = "번역"
         _log(f"번역 시작 ({after_dup}블록)...")
         reset_stats()
         t0 = time.time()
         translated_content = _translate_srt_content(merged_content)
         stats = get_stats()
+        failed_texts = get_failed_texts()
         total_translated = stats["deepl"] + stats["failed"]
         elapsed = time.time() - t0
         _log(
@@ -330,9 +359,15 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
             preview_blocks = _parse_srt_blocks(translated_content)[:3]
             for b in preview_blocks:
                 print("    " + " | ".join(b))
-            return
+            status = STATUS_PARTIAL if stats["failed"] > 0 else STATUS_DONE
+            return ProcessResult(
+                filename=filepath.name, status=status,
+                failed_blocks=stats["failed"], total_blocks=total_translated,
+                failed_texts=failed_texts,
+            )
 
         # ── Step 8: template 치환 규칙 적용 ──────────────────────────
+        current_stage = "치환 규칙 적용"
         if replace_rules:
             t0 = time.time()
             ko_bak_path = output_path.with_name(output_path.name + ".bak")
@@ -342,14 +377,55 @@ def process_srt_file(filepath: Path, index: int = 1, total: int = 1, replace_rul
             _log(f"template 치환 완료 ({time.time() - t0:.1f}s)")
 
         # ── Step 9: 번역 결과 .ko.srt 저장 ──
+        current_stage = "결과 저장"
         output_path.write_text(translated_content, encoding="utf-8-sig")
         _log(f"저장 완료 → {output_path.name}")
 
         elapsed_total = time.time() - ts_start
         _log(f"완료 ✓  총 소요: {elapsed_total:.1f}s")
 
+        status = STATUS_PARTIAL if stats["failed"] > 0 else STATUS_DONE
+        return ProcessResult(
+            filename=filepath.name, status=status,
+            failed_blocks=stats["failed"], total_blocks=total_translated,
+            failed_texts=failed_texts,
+        )
+
     except Exception as e:
         _log(f"!!! 오류 발생: {e}")
         if backup_path.exists():
             _log(f"(참고: 백업 파일은 생성되었습니다 — {backup_path.name})")
-        raise
+        return ProcessResult(
+            filename=filepath.name, status=STATUS_FAILED,
+            error_stage=current_stage, error_message=str(e),
+        )
+
+
+def print_summary(results: list[ProcessResult]) -> None:
+    """
+    모든 파일 처리가 끝난 후 완료/부분 오류/처리 실패 개수와
+    오류가 있는 파일의 상세 목록을 출력합니다.
+    """
+    done = sum(1 for r in results if r.status == STATUS_DONE)
+    partial = sum(1 for r in results if r.status == STATUS_PARTIAL)
+    failed = sum(1 for r in results if r.status == STATUS_FAILED)
+
+    print(f"완료: {done}/{len(results)}, 부분 오류: {partial}, 처리 실패: {failed}")
+
+    if partial + failed == 0:
+        return
+
+    print("--- 오류 상세 ---")
+    for r in results:
+        if r.status == STATUS_PARTIAL:
+            print(f"[부분 오류] {r.filename} — 번역 {r.failed_blocks}/{r.total_blocks}블록 실패")
+            for text in r.failed_texts:
+                snippet = text.replace("\n", " ").strip()
+                if len(snippet) > 100:
+                    snippet = snippet[:100] + "..."
+                print(f"    └ {snippet}")
+        elif r.status == STATUS_FAILED:
+            message = r.error_message or ""
+            if len(message) > 100:
+                message = message[:100] + "..."
+            print(f"[처리 실패] {r.filename} — {r.error_stage} 단계 — {message}")

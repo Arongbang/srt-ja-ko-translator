@@ -5,17 +5,25 @@ from hallucination import clean_hallucination
 
 # 파일당 번역 소스 통계 (srt_processor.py에서 reset_stats()/get_stats() 사용)
 _stats: dict[str, int] = {"deepl": 0, "failed": 0}
+# 번역 실패한 원문 목록 (srt_processor.py에서 reset_stats()/get_failed_texts() 사용)
+_failed_texts: list[str] = []
 
 
 def reset_stats() -> None:
     """파일 처리 시작 전 통계를 초기화합니다."""
-    global _stats
+    global _stats, _failed_texts
     _stats = {"deepl": 0, "failed": 0}
+    _failed_texts = []
 
 
 def get_stats() -> dict[str, int]:
     """현재 번역 소스별 통계를 반환합니다."""
     return dict(_stats)
+
+
+def get_failed_texts() -> list[str]:
+    """번역 실패한 원문(일본어 문장) 목록을 반환합니다."""
+    return list(_failed_texts)
 
 
 def translate_ja_to_ko(text: str) -> str:
@@ -62,4 +70,5 @@ def translate_ja_to_ko(text: str) -> str:
             pass  # 재시도
 
     _stats["failed"] += 1
+    _failed_texts.append(text)
     return f"[번역 실패] {text}"

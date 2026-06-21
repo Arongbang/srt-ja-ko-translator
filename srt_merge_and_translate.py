@@ -8,7 +8,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
 
 import config
 from apply_replacements import load_replace_rules, apply_rules
-from srt_processor import get_srt_files, process_srt_file
+from srt_processor import get_srt_files, process_srt_file, print_summary, ProcessResult, STATUS_FAILED
 from transcriber import transcribe_folder
 
 
@@ -134,11 +134,17 @@ def main():
 
     print(f"발견된 .srt 파일 수: {len(srt_files)}\n")
 
+    results: list[ProcessResult] = []
     for i, srt_file in enumerate(srt_files, start=1):
-        process_srt_file(srt_file, index=i, total=len(srt_files), replace_rules=replace_rules)
+        try:
+            result = process_srt_file(srt_file, index=i, total=len(srt_files), replace_rules=replace_rules)
+        except Exception as e:
+            result = ProcessResult(filename=srt_file.name, status=STATUS_FAILED, error_stage="알 수 없음", error_message=str(e))
+        results.append(result)
         print()
 
     print("===== 모든 파일 처리 완료 =====")
+    print_summary(results)
 
 
 if __name__ == "__main__":
